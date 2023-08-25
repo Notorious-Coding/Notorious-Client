@@ -2,11 +2,11 @@
 
 **Notorious Client** est une librairie simplifiant l'envoie de requête HTTP grâce a un builder de requête et un système de client extensible a l'infini.
 
-## Support
+## <span style="color: #923CFF">Support</span>
 
 - Net6/7
 
-## Fonctionnalitées
+## <span style="color: #923CFF">Fonctionnalitées</span>
 
 - Construire des HttpRequestMessage simplement grâce au builder
 - Serialisation JSON des bodys automatique
@@ -15,11 +15,11 @@
 - Personnalisable a l'infini
 - Code clair et maintenable
 
-## Motivation
+## <span style="color: #923CFF">Motivation</span>
 
 L'objectif est de fournir une manière de créer des clients d'API de manière clair, rapide, et surtout maintenable.
 
-## Getting Started
+## <span style="color: #923CFF">Getting Started</span>
 
 Installer le Nuget **NotoriousClient**.
 
