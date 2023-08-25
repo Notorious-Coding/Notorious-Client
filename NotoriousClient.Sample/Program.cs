@@ -16,7 +16,7 @@ HttpRequestMessage request = requestBuilder
     .Build();
 
 
-new RequestSender(null);
+new RequestSender(null as HttpClient);
 
 
 var services = new ServiceCollection();

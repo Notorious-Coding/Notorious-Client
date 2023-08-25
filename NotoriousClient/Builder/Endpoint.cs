@@ -23,7 +23,6 @@
         /// <param name="method">Method de l'endpoint.</param>
         public Endpoint(string route, Method method)
         {
-            ArgumentException.ThrowIfNullOrEmpty(route, nameof(route));
             Route = route;
             Method = method;
         }

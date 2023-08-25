@@ -74,7 +74,6 @@ namespace NotoriousClient.Framework.Web.Client.Builder
         public IRequestBuilder WithContentMultipartBody(HttpContent content, string section)
         {
             ArgumentNullException.ThrowIfNull(content, nameof(content));
-            ArgumentException.ThrowIfNullOrEmpty(section, nameof(section));
 
             SetIsMultipart(isMultipart: true);
             _bodies.Add(new Body(content, section));
