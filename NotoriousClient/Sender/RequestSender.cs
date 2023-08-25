@@ -24,6 +24,16 @@ namespace NotoriousClient.Framework.Web.Client.Sender
         }
 
         /// <summary>
+        /// Initialise une nouvelle instance de la classe <see cref="RequestSender"/>.
+        /// </summary>
+        /// <param name="httpClient"></param>brefj
+        public RequestSender(HttpClient client)
+        {
+            ArgumentNullException.ThrowIfNull(client, nameof(client));
+            _client = client;
+        }
+
+        /// <summary>
         /// Permet d'envoyer une requête de manière asynchrone.
         /// </summary>
         /// <param name="request">Requête à envoyer.</param>
@@ -32,10 +42,6 @@ namespace NotoriousClient.Framework.Web.Client.Sender
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
             byte[] content = await request.Content.ReadAsByteArrayAsync();
-            if (content.Length > MAX_BODY_SIZE)
-            {
-                throw new MaxBodyLimitExceededException($"La taille du corps de la requête a dépassé le taille maximale de {MAX_BODY_SIZE}", request);
-            }
             HttpResponseMessage response =  await _client.SendAsync(request, cancellationToken);
 
             return response;
