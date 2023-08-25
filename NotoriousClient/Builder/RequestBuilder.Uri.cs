@@ -81,13 +81,21 @@ namespace NotoriousClient.Framework.Web.Client.Builder
 
         private string HandleUriQueryParams(string uri, Dictionary<string, string> queryParams)
         {
-            string queryParamsString = string.Join("&", queryParams.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
-            return string.Format(uri + "?{0}", HttpUtility.UrlEncode(queryParamsString));
+            if (queryParams.Count > 0)
+            {
+                string queryParamsString = string.Join("&", queryParams.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
+                return string.Format(uri + "?{0}", HttpUtility.UrlEncode(queryParamsString));
+            }
+            else
+            {
+                return uri;
+            }
+            
         }
 
         private string HandleUriEndPointParams(string uri, Dictionary<string, string> endPointParams)
         {
-            foreach(var param in endPointParams)
+            foreach (var param in endPointParams)
             {
                 var token = GetReplacementToken(param.Key);
                 if (uri.Contains(token))

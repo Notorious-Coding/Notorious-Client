@@ -32,5 +32,7 @@ namespace NotoriousClient.Framework.Web.Client.Builder
             builder.WithAuthentication(new BearerAuthenticationInformation(jwt));
             return builder;
         }
+
+
     }
 }

@@ -1,8 +1,4 @@
-﻿using NotoriousClient.Framework.Web.Client.Formatters;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Formatting;
 
 namespace NotoriousClient.Framework.Web.Client.Sender
 {
@@ -11,7 +7,7 @@ namespace NotoriousClient.Framework.Web.Client.Sender
     /// </summary>
     public static class HttpResponseMessageExtensions
     {
-        private static readonly IList<MediaTypeFormatter> MediaTypeFormatters = new List<MediaTypeFormatter>() { new JsonMediaTypeFormatter(), new TextPlainFormatter() };
+        private static readonly IList<MediaTypeFormatter> MediaTypeFormatters = new List<MediaTypeFormatter>() { new JsonMediaTypeFormatter()};
 
         /// <summary>
         /// Permet de mapper le contenu d'une réponse à un objet de manière asynchrone.

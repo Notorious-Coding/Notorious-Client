@@ -17,6 +17,16 @@
             _method = method;
         }
 
+        public RequestBuilder(string url, Endpoint endpoint)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(url, nameof(url));
+            ArgumentNullException.ThrowIfNull(endpoint, nameof(endpoint));
+
+            _url = url;
+            _route = endpoint.Route;
+            _method = endpoint.Method;
+        }
+
         ///<inheritdoc/>
         public virtual HttpRequestMessage Build()
         {

@@ -12,6 +12,7 @@ namespace NotoriousClient.Framework.Web.Client.Builder
 
         private List<Body> _bodies = new List<Body>();
         private bool? _isMultipartRequest = null;
+
         ///<inheritdoc/>
         public IRequestBuilder WithJsonBody(object data, IJsonConverter? converter = null)
         {

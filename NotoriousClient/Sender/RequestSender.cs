@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NotoriousClient.Sender.Exceptions;
 using System.Net;
 
 namespace NotoriousClient.Framework.Web.Client.Sender
@@ -10,10 +11,12 @@ namespace NotoriousClient.Framework.Web.Client.Sender
     {
         private readonly HttpClient _client;
 
+        private const int MAX_BODY_SIZE = 256;
+
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="RequestSender"/>.
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory"></param>brefj
         public RequestSender(IHttpClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
@@ -28,7 +31,14 @@ namespace NotoriousClient.Framework.Web.Client.Sender
         /// <returns>Réponse.</returns>
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
-            return await _client.SendAsync(request, cancellationToken);
+            byte[] content = await request.Content.ReadAsByteArrayAsync();
+            if (content.Length > MAX_BODY_SIZE)
+            {
+                throw new MaxBodyLimitExceededException($"La taille du corps de la requête a dépassé le taille maximale de {MAX_BODY_SIZE}", request);
+            }
+            HttpResponseMessage response =  await _client.SendAsync(request, cancellationToken);
+
+            return response;
         }
 
         /// <summary>
