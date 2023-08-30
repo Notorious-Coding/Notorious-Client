@@ -1,29 +1,38 @@
 ## ![Logo](./Documentation/Images/NotoriousClient.png)
 
-**Notorious Client** est une librairie simplifiant l'envoie de requête HTTP grâce a un builder de requête et un système de client extensible a l'infini.
+**Notorious Client** is meant to simplify the sending of HTTP requests through a fluent builder and an infinitely extensible client system.
 
 ## Support
 
 - Net6/7
 
-## Fonctionnalitées
+## Features
 
-- Construire des HttpRequestMessage simplement grâce au builder
-- Serialisation JSON des bodys automatique
-- Gestion des requêtes multipart/form-data
-- Gestion de l'authentification Basic Auth
-- Personnalisable a l'infini
-- Code clair et maintenable
+- Easy building of HttpRequestMessage
+- Easy building of multipart/form-data requests
+- Body serialisation as JSON, powered by Newtonsoft, but customisable.
+- Easy handling of authentication in requests
+- Infinitely extensible system.
+- Permit clean code.
 
 ## Motivation
 
-L'objectif est de fournir une manière de créer des clients d'API de manière clair, rapide, et surtout maintenable.
+The goal is to provide a way to create API clients that is clear, fast, and above all, maintainable.
 
 ## Getting Started
 
-Installer le Nuget **NotoriousClient**.
+First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [NotoriousClient](https://www.nuget.org/packages/NotoriousClient/) from the package manager console:
 
-Créer une classe héritant de BaseClient :
+```
+PM> Install-Package NotoriousClient
+```
+Or from the .NET CLI as:
+```
+dotnet add package NotoriousClient
+```
+
+
+Then create a client, and inherit from BaseClient :
 
 ```csharp
 using NotoriousClient.Clients;
@@ -36,19 +45,19 @@ public class UserClient : BaseClient, IUserClient
 }
 ```
 
-Ajouter des méthodes dans le client pour appeller l'api concerné.
+Add method within that client that uses RequestBuilder to build your request.
 
 ```csharp
 public class UserClient : BaseClient, IUserClient
 {
-    // Définissez vos endpoints
+    // Define your endpoint
     private Endpoint GET_USERS_ENDPOINT = new Endpoint("/api/users", Method.Get);
 
     public UserClient(IRequestSender sender, string url) : base(sender, url)
     {
     }
 
-    // Ajouter la méthode d'appel
+    // Add call method.
     public async Task<IEnumerable<User>> GetUsers()
     {
         HttpRequestMessage request = GetBuilder(GET_USERS_ENDPOINT)
@@ -64,7 +73,7 @@ public class UserClient : BaseClient, IUserClient
 
 ```
 
-D'autre exemple d'appel API:
+Other example of API call.
 
 ```csharp
 private Endpoint GET_USER_ENDPOINT = new Endpoint("/api/users/{id}", Method.Get);
@@ -98,10 +107,9 @@ public async Task<User> CreateUser(User user)
 }
 ```
 
-Vous pouvez ensuite créer ce client en lui donnant un IRequestSender :
+Last but not least, add everything to your dependency injection.
 
 ```csharp
-// Vous pouvez récupérer un HttpClient depuis l'injection
 services.AddHttpClient();
 services.AddScoped<IRequestSender, RequestSender>();
 services.AddScoped<IUserClient>((serviceProvider) =>
