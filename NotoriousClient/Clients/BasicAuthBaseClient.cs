@@ -12,7 +12,7 @@ namespace NotoriousClient.Clients
         private readonly string _password;
 
         /// <summary>
-        /// Initialize a new instance of <see cref="BaseClient"/>.
+        /// Initialize a new instance of <see cref="SynchronousBaseClient"/>.
         /// </summary>
         /// <param name="sender">Class used to send <see cref="HttpRequestMessage"/>.</param>
         /// <param name="url">Base URL of api (ex: https://myapi.com/).</param>

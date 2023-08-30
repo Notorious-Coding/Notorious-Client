@@ -2,7 +2,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using NotoriousClient.Builder;
+using NotoriousClient.Builder.Authentication;
 using NotoriousClient.Clients;
+using NotoriousClient.Converters;
 using NotoriousClient.Sender;
 
 Console.WriteLine("Hello, World!");
@@ -76,3 +78,60 @@ public class UserClient : BaseClient
         return response.ReadAs<IEnumerable<User>>();
     }
 }
+
+public class BearerAuthClient : BaseClient
+{
+    public BearerAuthClient(IRequestSender sender, string url) : base(sender, url)
+    {
+
+    }
+
+    protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get)
+    {
+        string token = await GetToken();
+        return (await base.GetBuilderAsync(route, method)).WithAuthentication(token);
+    }
+
+    public async Task<string> GetToken()
+    {
+        // Handle token here;
+        return "token";
+    }
+}
+
+public class UserClientBis : BearerAuthClient
+{
+    private Endpoint CREATE_USER_ENDPOINT = new Endpoint("/api/users", Method.Post);
+
+    public UserClientBis(IRequestSender sender, string url) : base(sender, url)
+    {
+    }
+
+    public async Task<IEnumerable<User>> CreateUser(User user)
+    {
+        // Every builded request will be configured with bearer authentication !
+        HttpRequestMessage request = (await GetBuilderAsync(CREATE_USER_ENDPOINT))
+            .WithJsonBody(user)
+            .Build();
+
+        HttpResponseMessage response = await Sender.SendAsync(request);
+
+        return response.ReadAs<IEnumerable<User>>();
+    }
+}
+
+public class NotoriousAuthentication : IAuthenticationInformation
+{
+    private readonly string _crownId;
+    private readonly string _crownName;
+    public NotoriousAuthentication(string crownId, string crownName)
+    {
+        _crownId = crownId;
+        _crownName = crownName;
+    }
+    public string Token => _crownName + _crownId;
+
+    public string Scheme => "Notorious";
+}
+
+public class CustomSerializer : IJsonSerializer

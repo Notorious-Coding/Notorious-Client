@@ -13,7 +13,7 @@ namespace NotoriousClient.Builder
         /// </summary>
         /// <param name="data">Data to add.</param>
         /// <param name="converter">Custom json converter.</param>
-        IRequestBuilder WithJsonBody(object data, IJsonConverter? converter = null);
+        IRequestBuilder WithJsonBody(object data, IJsonSerializer? converter = null);
 
         /// <summary>
         /// Add a Stream to request's body.
@@ -40,7 +40,7 @@ namespace NotoriousClient.Builder
         /// <param name="data">Data to add.</param>
         /// <param name="section">Name of multipart section.</param>
         /// <param name="converter">Custom json converter.</param>
-        IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonConverter? converter = null);
+        IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer? converter = null);
 
         /// <summary>
         /// Add a http <paramref name="content"/> to multiplart request's bodies under <paramref name="section"/> name.

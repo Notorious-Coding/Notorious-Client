@@ -6,9 +6,9 @@ using System.Text;
 namespace NotoriousClient.Converters
 {
     /// <summary>
-    /// Convert object to JSON using NewtonsoftJson.
+    /// Serialize object to JSON using NewtonsoftJson.
     /// </summary>
-    public class NewtonsoftJsonConverter : IJsonConverter
+    public class NewtonsoftJsonSerializer : IJsonSerializer
     {
         public string ConvertToJson(object obj)
         {

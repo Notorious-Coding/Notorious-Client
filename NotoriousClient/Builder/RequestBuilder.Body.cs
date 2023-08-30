@@ -8,13 +8,13 @@ namespace NotoriousClient.Builder
         /// <summary>
         /// Default JSON Converter.
         /// </summary>
-        protected IJsonConverter DefaultJsonConverter = new NewtonsoftJsonConverter();
+        protected IJsonSerializer DefaultJsonConverter = new NewtonsoftJsonSerializer();
 
         private List<Body> _bodies = new List<Body>();
         private bool? _isMultipartRequest = null;
 
         ///<inheritdoc/>
-        public IRequestBuilder WithJsonBody(object data, IJsonConverter? converter = null)
+        public IRequestBuilder WithJsonBody(object data, IJsonSerializer? converter = null)
         {
             ArgumentNullException.ThrowIfNull(data, nameof(data));
             SetIsMultipart(isMultipart: false);
@@ -55,7 +55,7 @@ namespace NotoriousClient.Builder
         }
 
         ///<inheritdoc/>
-        public IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonConverter? converter = null)
+        public IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer? converter = null)
         {
             ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -98,7 +98,7 @@ namespace NotoriousClient.Builder
             }
         }
 
-        private IJsonConverter GetConverter(IJsonConverter? converter = null)
+        private IJsonSerializer GetConverter(IJsonSerializer? converter = null)
         {
             return converter == null ? DefaultJsonConverter : converter;
         }

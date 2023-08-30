@@ -7,7 +7,7 @@ namespace NotoriousClient.Converters
     /// <summary>
     /// JSON converter.
     /// </summary>
-    public interface IJsonConverter
+    public interface IJsonSerializer
     {
         /// <summary>
         /// Serialize object to JSON string.
