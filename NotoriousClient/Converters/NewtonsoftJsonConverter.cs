@@ -6,7 +6,7 @@ using System.Text;
 namespace NotoriousClient.Converters
 {
     /// <summary>
-    /// Permet de convertir un objet en string a partir du serializer Newtonsoft.
+    /// Convert object to JSON using NewtonsoftJson.
     /// </summary>
     public class NewtonsoftJsonConverter : IJsonConverter
     {

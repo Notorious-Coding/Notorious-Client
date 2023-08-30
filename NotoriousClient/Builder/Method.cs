@@ -1,28 +1,28 @@
 ﻿namespace NotoriousClient.Builder
 {
     /// <summary>
-    /// Verbe HTTP.
+    /// HTTP Verb.
     /// </summary>
     public enum Method
     {
         /// <summary>
-        /// Verbe GET.
+        /// GET Verb.
         /// </summary>
         Get,
         /// <summary>
-        /// Verbe POST.
+        /// POST Verb.
         /// </summary>
         Post,
         /// <summary>
-        /// Verbe PUT.
+        /// PUT Verb.
         /// </summary>
         Put,
         /// <summary>
-        /// Verbe PATCH.
+        /// PATCH Verb.
         /// </summary>
         Patch,
         /// <summary>
-        /// Verbe DELETE.
+        /// DELETE Verb.
         /// </summary>
         Delete
     }

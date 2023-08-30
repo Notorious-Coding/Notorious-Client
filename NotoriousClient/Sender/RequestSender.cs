@@ -1,18 +1,16 @@
 ﻿namespace NotoriousClient.Sender
 {
     /// <summary>
-    /// Permet l'envoi d'une requête HTTP.
+    /// Class used to send <see cref="HttpRequestMessage"/>.
     /// </summary>
     public class RequestSender : IRequestSender
     {
         private readonly HttpClient _client;
 
-        private const int MAX_BODY_SIZE = 256;
-
         /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RequestSender"/>.
+        /// Initialize a new instance of <see cref="RequestSender"/>.
         /// </summary>
-        /// <param name="factory"></param>brefj
+        /// <param name="factory">HttpClient's factory</param>
         public RequestSender(IHttpClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
@@ -20,21 +18,16 @@
         }
 
         /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RequestSender"/>.
+        /// Initialize a new instance of <see cref="RequestSender"/>.
         /// </summary>
-        /// <param name="httpClient"></param>brefj
+        /// <param name="client">Http client.</param>
         public RequestSender(HttpClient client)
         {
             ArgumentNullException.ThrowIfNull(client, nameof(client));
             _client = client;
         }
 
-        /// <summary>
-        /// Permet d'envoyer une requête de manière asynchrone.
-        /// </summary>
-        /// <param name="request">Requête à envoyer.</param>
-        /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <returns>Réponse.</returns>
+        /// <inheritdoc/> 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
             byte[] content = await request.Content.ReadAsByteArrayAsync();
@@ -43,11 +36,7 @@
             return response;
         }
 
-        /// <summary>
-        /// Permet d'envoyer une requête de manière synchrone.
-        /// </summary>
-        /// <param name="request">Requête à envoyer.</param>
-        /// <returns>Réponse.</returns>
+        /// <inheritdoc/> 
         public HttpResponseMessage Send(HttpRequestMessage request)
         {
             return _client.Send(request);

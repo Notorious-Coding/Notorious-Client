@@ -1,17 +1,17 @@
 ﻿namespace NotoriousClient.Builder.Authentication
 {
     /// <summary>
-    /// Information d'authentification par token.
+    /// Authentication data.
     /// </summary>
     public interface IAuthenticationInformation
     {
         /// <summary>
-        /// Valeur du token de l'authentification.
+        /// Authentication token.
         /// </summary>
         string Token { get; }
 
         /// <summary>
-        /// Valeur du schéma de l'authentification.
+        /// Authentication schema.
         /// </summary>
         string Scheme { get; }
     }

@@ -6,7 +6,7 @@
 		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.3</Version>
+		<Version>0.0.4</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Brice SCHUMACHER</Authors>
 		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>

@@ -3,17 +3,17 @@
 namespace NotoriousClient.Builder.Authentication
 {
     /// <summary>
-    /// Information d'authentification Basic (Username et password).
+    /// Basic authentication information.
     /// </summary>
     public class BasicAuthenticationInformation : IAuthenticationInformation
     {
         /// <summary>
-        /// Nom de l'utilisateur.
+        /// User login.
         /// </summary>
         public string UserName { get; private set; }
 
         /// <summary>
-        /// Mot de passe.
+        /// User password.
         /// </summary>
         public string Password { get; private set; }
 
@@ -24,10 +24,10 @@ namespace NotoriousClient.Builder.Authentication
         public string Scheme => "Basic";
 
         /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RequestBuilder"/>.
+        /// Initialize a new instance of <see cref="BasicAuthenticationInformation"/>.
         /// </summary>
-        /// <param name="username">Nom d'utilisateur.</param>
-        /// <param name="password">Mot de passe</param>
+        /// <param name="username">User's login.</param>
+        /// <param name="password">User's password</param>
         public BasicAuthenticationInformation(string username, string password)
         {
             UserName = username;

@@ -1,7 +1,7 @@
 ﻿namespace NotoriousClient.Builder.Authentication
 {
     /// <summary>
-    /// Information d'authentification Bearer Token (Bearer).
+    /// Bearer token authentication information.
     /// </summary>
     public class BearerAuthenticationInformation : IAuthenticationInformation
     {
@@ -14,9 +14,9 @@
         public string Scheme => "Bearer";
 
         /// <summary>
-        /// Permet de créer une instance de la classe <see cref="BearerAuthenticationInformation"/>
+        /// Initialize a new instance of <see cref="BearerAuthenticationInformation"/>
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">Bearer token.</param>
         public BearerAuthenticationInformation(string token)
         {
             _token = token;

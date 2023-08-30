@@ -6,7 +6,7 @@ namespace NotoriousClient.Builder
     public partial class RequestBuilder : IRequestBuilder
     {
         /// <summary>
-        /// Converteur Json par défault. 
+        /// Default JSON Converter.
         /// </summary>
         protected IJsonConverter DefaultJsonConverter = new NewtonsoftJsonConverter();
 

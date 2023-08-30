@@ -5,23 +5,23 @@ using System.Threading.Tasks;
 namespace NotoriousClient.Sender
 {
     /// <summary>
-    /// Permet l'envoi d'une requête HTTP.
+    /// Class used to send <see cref="HttpRequestMessage"/>.
     /// </summary>
     public interface IRequestSender
     {
         /// <summary>
-        /// Permet d'envoyer une requête de manière synchrone.
+        /// Send a <paramref name="request"/> asynchronously.
         /// </summary>
-        /// <param name="request">Requête à envoyer.</param>
-        /// <returns>Réponse.</returns>
+        /// <param name="request">Request to send.</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Request response.</returns>
         HttpResponseMessage Send(HttpRequestMessage request);
 
         /// <summary>
-        /// Permet d'envoyer une requête de manière asynchrone.
+        /// Send a <paramref name="request"/> synchronously.
         /// </summary>
-        /// <param name="request">Requête à envoyer.</param>
-        /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <returns>Réponse.</returns>
+        /// <param name="request">Request to send.</param>
+        /// <returns>Request response.</returns>
         Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default);
     }
 }

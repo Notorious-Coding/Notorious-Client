@@ -3,90 +3,89 @@
 namespace NotoriousClient.Sender
 {
     /// <summary>
-    /// Méthodes d'extensions sur la classe <see cref="HttpResponseMessage"/>.
+    /// Extensions method for <see cref="HttpResponseMessage"/>.
     /// </summary>
     public static class HttpResponseMessageExtensions
     {
         private static readonly IList<MediaTypeFormatter> MediaTypeFormatters = new List<MediaTypeFormatter>() { new JsonMediaTypeFormatter()};
 
         /// <summary>
-        /// Permet de mapper le contenu d'une réponse à un objet de manière asynchrone.
+        /// Map response to <typeparamref name="T"/> asynchronously.
         /// </summary>
-        /// <typeparam name="T">Type de l'objet de retour.</typeparam>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse mappé.</returns>
+        /// <typeparam name="T">Type of response.</typeparam>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content.</returns>
         public static Task<T> ReadAsAsync<T>(this HttpResponseMessage response)
         {
             return response.Content.ReadAsAsync<T>(MediaTypeFormatters);
         }
 
         /// <summary>
-        /// Permet de lire le contenu de la réponse comme une chaine de caractère de manière asynchrone.
+        /// Map response to a string asynchronously.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format String</returns>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content.</returns>
         public static Task<string> ReadAsStringAsync(this HttpResponseMessage response)
         {
             return response.Content.ReadAsStringAsync();
         }
 
         /// <summary>
-        /// Permet de lire le contenu de la réponse comme un tableau de byte de manière asynchrone.
+        /// Map response to a byte array asynchronously.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format d'un tableau de byte.</returns>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content as byte array.</returns>
         public static Task<byte[]> ReadAsByteArrayAsync(this HttpResponseMessage response)
         {
             return response.Content.ReadAsByteArrayAsync();
         }
-
         /// <summary>
-        /// Permet de lire le contenu de la réponse comme un stream de manière asynchrone.
+        /// Map response to a byte array asynchronously.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format d'un stream.</returns>
-        public static Task<System.IO.Stream> ReadAsStreamAsync(this HttpResponseMessage response)
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content as stream.</returns>
+        public static Task<Stream> ReadAsStreamAsync(this HttpResponseMessage response)
         {
             return response.Content.ReadAsStreamAsync();
         }
 
         /// <summary>
-        /// Permet de mapper le contenu de la réponse à un objet.
+        /// Map response to <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T">Type de l'objet de retour.</typeparam>
-        /// <param name="response">La réponse à lire.</param>
-        /// <returns>Le contenu de la réponse mappé.</returns>
+        /// <typeparam name="T">Type of response.</typeparam>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content.</returns>
         public static T ReadAs<T>(this HttpResponseMessage response)
         {
             return ReadAsAsync<T>(response).GetAwaiter().GetResult();
         }
 
         /// <summary>
-        /// Permet de lire le contenu de la réponse comme une chaine de caractère.
+        /// Map response to a string.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format d'une string.</returns>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content.</returns>
         public static string ReadAsString(this HttpResponseMessage response)
         {
             return ReadAsStringAsync(response).Result;
         }
 
         /// <summary>
-        /// Permet de lire le contenu de la réponse au format tableau de byte.
+        /// Map response to a byte array.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format d'un tableau de byte.</returns>
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content as stream.</returns>
         public static byte[] ReadAsByteArray(this HttpResponseMessage response)
         {
             return ReadAsByteArrayAsync(response).GetAwaiter().GetResult();
         }
 
         /// <summary>
-        /// Permet de lire le contenu de la réponse comme un stream.
+        /// Map response to a byte array asynchronously.
         /// </summary>
-        /// <param name="response">La réponse a lire.</param>
-        /// <returns>Le contenu de la réponse au format d'un stream.</returns>
-        public static System.IO.Stream ReadAsStream(this HttpResponseMessage response)
+        /// <param name="response">Response to map.</param>
+        /// <returns>Mapped content as stream.</returns>
+        public static Stream ReadAsStream(this HttpResponseMessage response)
         {
             return ReadAsStreamAsync(response).GetAwaiter().GetResult();
         }

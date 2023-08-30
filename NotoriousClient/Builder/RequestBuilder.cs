@@ -6,7 +6,7 @@
         private Method _method;        
         
         /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RequestBuilder"/>.
+        /// Initialize a new instance of <see cref="RequestBuilder"/>.
         /// </summary>
         public RequestBuilder(string url, string route, Method method)
         {
@@ -17,6 +17,9 @@
             _method = method;
         }
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="RequestBuilder"/>.
+        /// </summary>
         public RequestBuilder(string url, Endpoint endpoint)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException();

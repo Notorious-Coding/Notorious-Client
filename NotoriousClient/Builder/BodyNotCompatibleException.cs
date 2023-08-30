@@ -1,8 +1,11 @@
 ﻿namespace NotoriousClient.Builder
 {
+    /// <summary>
+    /// Body is not compatible with current configured request.
+    /// </summary>
     public class BodyNotCompatibleException : Exception
     {
-        public BodyNotCompatibleException() : base("Le body que vous utilisez n'est pas compatible avec la requête en cours.")
+        public BodyNotCompatibleException() : base("Body is not compatible with current configured request, it often occurs when you try adding classic body to multipart request.")
         {
             
         }

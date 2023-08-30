@@ -17,8 +17,6 @@ namespace NotoriousClient.Builder
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException();
 
-            //On gère directement via l'index pour laisser la possibilité d'ovveride un param existant dans le builder
-            //Par exemple dans le cas ou on hérite d'un BaseClient qui set un paramètre qu'on voudrais remplacer pour une fois.
             _queryParams[key] = value;
             return this;
         }

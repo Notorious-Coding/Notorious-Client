@@ -26,7 +26,7 @@ Installer le Nuget **NotoriousClient**.
 Créer une classe héritant de BaseClient :
 
 ```csharp
-using NotoriousClient.Framework.Web.Client.RestClients;
+using NotoriousClient.Clients;
 
 public class UserClient : BaseClient, IUserClient
 {

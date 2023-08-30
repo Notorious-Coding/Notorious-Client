@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using NotoriousClient.Builder;
-using NotoriousClient.RestClients;
+using NotoriousClient.Clients;
 using NotoriousClient.Sender;
 
 Console.WriteLine("Hello, World!");

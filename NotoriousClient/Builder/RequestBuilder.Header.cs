@@ -21,8 +21,7 @@ namespace NotoriousClient.Builder
         public IRequestBuilder AddCustomHeader(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException();
-            //On gère directement via l'index pour laisser la possibilité d'ovveride un header existant dans le builder
-            //Par exemple dans le cas ou on hérite d'un BaseClient qui set un header qu'on voudrais remplacer pour une fois.
+
             _headers[key] = value;
 
             return this;
