@@ -124,7 +124,7 @@ You can create a standalone builder by instantiating RequestBuilder.
 ```csharp
 
 // Dont forget to use IRequestBuilder to have access to extensions method !
-IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
+new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
 
 ```
 
@@ -136,50 +136,50 @@ Lets dive into the possibity of the RequestBuilder !
 ### Configure URN, URL, and http verb.
 
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get);
+new RequestBuilder("https://toto.com", "/users", Method.Get);
 ```
 
 ### Configure URI parameters
 
 **Add URL parameters**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users/{id}", Method.Get).AddEndpointParameter("id", "myfakeid");
+new RequestBuilder("https://toto.com", "/users/{id}", Method.Get).AddEndpointParameter("id", "myfakeid");
 
 ```
 
 ```csharp
 IDictionary<string, string> endpointsParams = ...;
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users/{id}/{name}", Method.Get).AddEndpointParameters(endpointsParams);
+new RequestBuilder("https://toto.com", "/users/{id}/{name}", Method.Get).AddEndpointParameters(endpointsParams);
 ```
 
 **Add Query Parameters**
 
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameter("id", "myfakeid");
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameter("id", "myfakeid");
 
 ```
 
 ```csharp
 IDictionary<string, string> queryParams = ...;
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameters(endpoints);
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameters(endpoints);
 ```
 
 ### Configure request's headers
 
 **Add custom headers**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeader("id", "myfakeid");
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeader("id", "myfakeid");
 
 ```
 
 ```csharp
 IDictionary<string, string> headers = ...;
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeaders(endpoints);
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeaders(endpoints);
 ```
 
 **Add accept header**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithCustomAcceptMediaType("application/json");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithCustomAcceptMediaType("application/json");
 
 ```
 
@@ -187,13 +187,13 @@ IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users"
 
 **Add basic authentication**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("login", "password");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("login", "password");
 
 ```
 
 **Add bearer authentication**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("token");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("token");
 
 ```
 
@@ -214,7 +214,7 @@ public class NotoriousAuthentication : IAuthenticationInformation
     public string Scheme => "Notorious";
 }
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication(new NotoriousAuthentication("1997", "BIG"));
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication(new NotoriousAuthentication("1997", "BIG"));
 ```
 
 ### Add body to classic request
@@ -223,7 +223,7 @@ IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users"
 ```csharp
 User user = GetUsersFromDb()
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user);
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user);
 
 ```
 
@@ -240,7 +240,7 @@ public class CustomSerializer : IJsonSerializer
 
 User user = GetUsersFromDb()
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user, new CustomSerializer());
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user, new CustomSerializer());
 
 ```
 
@@ -248,13 +248,13 @@ IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users"
 ```csharp
 Stream stream = GetFileStream("C:/Crown/BIG.png")
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamBody(stream);
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamBody(stream);
 
 ```
 
 **Add body as HTTP Content**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentBody(new StringContent("MyCustomContent"));
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentBody(new StringContent("MyCustomContent"));
 ```
 
 > :warning: Note that you could use any type of content handled by .NET, such as StringContent, StreamContent, HttpContent, etc...
@@ -268,7 +268,7 @@ IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users"
 ```csharp
 User user = GetUsersFromDb()
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBody(user, "USER_SECTION");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBody(user, "USER_SECTION");
 
 ```
 
@@ -285,7 +285,7 @@ public class CustomSerializer : IJsonSerializer
 
 User user = GetUsersFromDb()
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBody(user, "USER_SECTION", new CustomSerializer());
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBody(user, "USER_SECTION", new CustomSerializer());
 
 ```
 
@@ -293,13 +293,13 @@ IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users"
 ```csharp
 Stream stream = GetFileStream("C:/Crown/BIG.png")
 
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamMultipartBody(stream, "STREAM_SECTION");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamMultipartBody(stream, "STREAM_SECTION");
 
 ```
 
 **Add body as HTTP Content**
 ```csharp
-IRequestBuilder requestBuilder = new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentMultipartBody(new StringContent("MyCustomContent"), "CUSTOM_CONTENT_SECTION");
+new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentMultipartBody(new StringContent("MyCustomContent"), "CUSTOM_CONTENT_SECTION");
 ```
 
 ## How could i implement a custom BaseClient.
