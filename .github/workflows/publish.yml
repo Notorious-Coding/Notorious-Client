@@ -7,7 +7,8 @@ on:
     branches: [ "develop" ]
 
 env: 
-  nugetApiKey: ${{secrets.NUGET_API_KEY}}  
+  nugetApiKey: ${{secrets.NUGET_API_KEY}}
+  nugetDirectory: ${{github.workspace}}/nuget
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +32,7 @@ jobs:
       run: dotnet restore NotoriousClient.sln
 
     - name: Build
-      run: dotnet build
+      run: dotnet build --output ${{ env.NuGetDirectory }}
       
     # Execute all unit tests in the solution
     - name: Execute unit tests
