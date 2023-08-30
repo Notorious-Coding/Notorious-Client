@@ -7,7 +7,7 @@ on:
     branches: [ "develop" ]
 
 env: 
-  nugetApiKey: ${{secrets.nugetApiKey}}  
+  nugetApiKey: ${{secrets.NUGET_API_KEY}}  
 jobs:
   build:
     runs-on: windows-latest  
@@ -35,4 +35,4 @@ jobs:
       run: dotnet test
       
     - name: Push
-      run: dotnet nuget push NotoriousClient.*.nupkg --api-key $nugetApiKey --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push NotoriousClient.0.0.1.nupkg --api-key $nugetApiKey --source https://api.nuget.org/v3/index.json
