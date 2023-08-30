@@ -9,6 +9,7 @@ on:
 env: 
   nugetApiKey: ${{secrets.NUGET_API_KEY}}
   nugetDirectory: ${{github.workspace}}/nuget
+  nugetSource: 'https://api.nuget.org/v3/index.json'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,7 +40,4 @@ jobs:
       run: dotnet test
       
     - name: Publish
-      run: |
-        foreach( $file in (Get-ChildItem "${{ env.nugetDirectory }}" -Recurse -Include *.nupkg)) {
-            dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-        }
+      run: dotnet nuget push ${{ env.nugetDirectory }}/*.nupkg -s ${{ env.nugetSource }} -k ${{ env.nugetApiKey }}
