@@ -37,4 +37,4 @@ jobs:
       run: dotnet test
       
     - name: Publish
-      run: dotnet nuget push "${{ env.nugetDirectory }}/*.nupkg" -s ${{ env.nugetSource }} -k ${{ env.nugetApiKey }}
+      run: dotnet nuget push "${{ env.nugetDirectory }}/NotoriousClient.0.0.1.nupkg" -s ${{ env.nugetSource }} -k ${{ env.nugetApiKey }}
