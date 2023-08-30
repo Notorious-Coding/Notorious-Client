@@ -3,11 +3,11 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Description>A fluent HTTPResponseMessage builder with fully extendable API Client implementation.</Description>
-		<PackageId>Notorious Client</PackageId>
+		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Version>0.0.3</Version>
-		<PackageReadmeFile>Readme.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Brice SCHUMACHER</Authors>
 		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
@@ -21,8 +21,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
+		<None Include="..\icon.png" Pack="true" PackagePath="" Visible="False" />
+		<None Include="..\README.md" Pack="true" PackagePath="" Visible="False" />
 	</ItemGroup>
 
 </Project>
