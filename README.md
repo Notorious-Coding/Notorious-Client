@@ -161,7 +161,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameter("
 
 ```csharp
 IDictionary<string, string> queryParams = ...;
-new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameters(endpoints);
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameters(queryParams);
 ```
 
 ### Configure request's headers
@@ -174,7 +174,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeader("id
 
 ```csharp
 IDictionary<string, string> headers = ...;
-new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeaders(endpoints);
+new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeaders(headers);
 ```
 
 **Add accept header**
