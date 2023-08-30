@@ -32,7 +32,7 @@ jobs:
       run: dotnet restore NotoriousClient.sln
 
     - name: Build
-      run: dotnet build --output ${{ env.NuGetDirectory }}
+      run: dotnet build --output ${{ env.nugetDirectory }}
       
     # Execute all unit tests in the solution
     - name: Execute unit tests
@@ -40,6 +40,6 @@ jobs:
       
     - name: Publish
       run: |
-        foreach( $file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
+        foreach( $file in (Get-ChildItem "${{ env.nugetDirectory }}" -Recurse -Include *.nupkg)) {
             dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
         }
