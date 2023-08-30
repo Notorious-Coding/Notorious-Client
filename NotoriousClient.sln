@@ -9,11 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotoriousClient.Sample", "N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotoriousClient.Tests.Unit", "NotoriousClient.Tests.Unit\NotoriousClient.Tests.Unit.csproj", "{8F832E05-5A6C-4289-AB1E-2CD644E521DF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{79EB0F4C-7054-4FDE-8650-F0CCD88AE7E6}"
-	ProjectSection(SolutionItems) = preProject
-		Readme.md = Readme.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
