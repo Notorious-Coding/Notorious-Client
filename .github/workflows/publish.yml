@@ -10,7 +10,7 @@ env:
   nugetApiKey: ${{secrets.NUGET_API_KEY}}  
 jobs:
   build:
-    runs-on: windows-latest  
+    runs-on: ubuntu-latest
     
     steps:
     - name: Checkout
@@ -24,8 +24,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore NotoriousClient.sln
 
     - name: Build
       run: dotnet build
