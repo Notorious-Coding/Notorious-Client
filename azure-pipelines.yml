@@ -6,7 +6,7 @@
 trigger:
 - develop
 
-pool: Hosted Agent
+pool: Azure Pipelines
 
 steps:
   - task: DotNetCoreCLI@2
