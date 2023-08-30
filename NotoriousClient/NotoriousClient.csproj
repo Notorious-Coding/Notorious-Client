@@ -2,16 +2,27 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<Description>A fluent HTTPResponseMessage builder with fully extendable API Client implementation.</Description>
+		<PackageId>Notorious Client</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.1</Version>
-		<PackageIconUrl></PackageIconUrl>
+		<Version>0.0.2</Version>
+		<PackageReadmeFile>Readme.md</PackageReadmeFile>
+		<Authors>Brice SCHUMACHER</Authors>
+		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
 	</ItemGroup>
 
 </Project>
