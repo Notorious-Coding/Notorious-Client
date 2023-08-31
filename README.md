@@ -124,7 +124,7 @@ You can create a standalone builder by instantiating RequestBuilder.
 ```csharp
 
 // Dont forget to use IRequestBuilder to have access to extensions method !
-new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
+IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
 
 ```
 
