@@ -20,16 +20,13 @@ namespace NotoriousClient.Tests.Unit
             then: "request has correct header")]
         public async Task RequestBuilder_Should_HandleHeadersCorrectly()
         {
-
             string url = "https://toto.com";
             Endpoint endpoint = new Endpoint("/pandas", Method.Get);
-
 
             IRequestBuilder requestBuilder = new RequestBuilder(url, endpoint)
                 .AddCustomHeader("toto", "totoValue")
                 .AddCustomHeader("toto2", "toto2Value");
             HttpRequestMessage request = requestBuilder.Build();
-
 
             Assert.Equal(2, request.Headers.Count());
             Assert.True(request.Headers.Contains("toto"));
@@ -63,7 +60,6 @@ namespace NotoriousClient.Tests.Unit
             then: "request has correct basic token in authorization header")]
         public async Task RequestBuilder_Should_HandleBasicAuthProperly()
         {
-
             string url = "https://toto.com";
             Endpoint endpoint = new Endpoint("/pandas", Method.Get);
 
@@ -94,16 +90,5 @@ namespace NotoriousClient.Tests.Unit
             Assert.Equal("Bearer", request.Headers.Authorization.Scheme);
             Assert.Equal(token, request.Headers.Authorization.Parameter);
         }
-
-        #region Private Methods
-        private byte[] GetRandomArray(int sizeInKb)
-        {
-
-            var rnd = new Random();
-            var bytes = new Byte[sizeInKb * 1024];
-            rnd.NextBytes(bytes);
-            return bytes;
-        }
-        #endregion
     }
 }
