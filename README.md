@@ -11,7 +11,7 @@
 - Easy building of HttpRequestMessage
 - Easy building of multipart/form-data requests
 - Body serialisation as JSON, powered by Newtonsoft, but customisable.
-- Easy handling of authentication in requests
+- Easy handling of request's authentication
 - Infinitely extensible system.
 - Permit clean code.
 
