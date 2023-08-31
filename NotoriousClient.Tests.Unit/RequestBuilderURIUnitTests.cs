@@ -9,7 +9,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a url, an endpoint, and an HTTP Verb", 
                  when: "i build a request", 
                  then: "request has right url, endpoint and verb")]
-        [Trait("Category", "Uri")]
         public void RequestBuilder_Should_HaveRightUrlEndpointAndVerb()
         {
             string url = "https://toto.com";
@@ -26,7 +25,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a url with and end slash, an endpoint with a start slash, and an HTTP Verb",
                  when: "i build a request",
                  then: "request has right url, endpoint and verb")]
-        [Trait("Category", "Uri")]
         public void RequestBuilder_Should_HandleUrlSlashProperly()
         {
             string url = "https://toto.com/";
@@ -43,7 +41,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a url, an endpoint, and an HTTP Verb",
          when: "i build a request",
          then: "request has right url, endpoint and verb")]
-        [Trait("Category", "Uri")]
         public void RequestBuilder_Should_AddUrlSlashProperly()
         {
             string url = "https://toto.com";
@@ -62,7 +59,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a request with one query parameters",
          when: "i build a request",
          then: "request has one query params")]
-        [Trait("Category", "Query Parameters")]
         public void RequestBuilder_Should_HaveOneQueryParams()
         {
             string url = "https://toto.com";
@@ -80,7 +76,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a request with two query parameters",
                  when: "i build a request",
                  then: "request has two query params")]
-        [Trait("Category", "Query Parameters")]
         public void RequestBuilder_Should_HaveTwoQueryParams()
         {
             string url = "https://toto.com";
@@ -101,7 +96,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a request with one endpoint parameters",
          when: "i build a request",
          then: "request has correct endpoint params")]
-        [Trait("Category", "Endpoint Parameters")]
         public void RequestBuilder_Should_HandleEndpointParams()
         {
             string url = "https://toto.com";
@@ -119,7 +113,6 @@ namespace NotoriousClient.Tests.Unit
         [GWTFact(given: "a request with one endpoint parameters and an endpoint without replacement token",
          when: "i build a request",
          then: "it throws a KeyNotFoundException")]
-        [Trait("Category", "Endpoint Parameters")]
         public void RequestBuilder_Should_ThrowKeyNotFoundExceptionWhenNoToken()
         {
             string url = "https://toto.com";

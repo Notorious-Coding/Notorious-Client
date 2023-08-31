@@ -2,6 +2,17 @@
 
 **Notorious Client** is meant to simplify the sending of HTTP requests through a fluent builder and an infinitely extensible client system.
 
+## Summary
+
+- [Support](#support)
+- [Features](#features)
+- [Motivation](#motivation)
+- [Getting started](#getting-started)
+- [How could i use RequestBuilder ?](#how-could-i-use-requestbuilder)
+- [How could i implement a custom BaseClient](#how-could-i-implement-a-custom-baseclient)
+- [How can i use requestBuilder in Standalone ?](#how-can-i-use-the-requests-builder-in-standalone)
+
+
 ## Support
 
 - Net6/7
@@ -118,18 +129,8 @@ services.AddScoped<IUserClient>((serviceProvider) =>
 });
 ```
 
-## How can i use the request's builder in standalone ? 
 
-You can create a standalone builder by instantiating RequestBuilder.
-```csharp
-
-// Dont forget to use IRequestBuilder to have access to extensions method !
-IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
-
-```
-
-Then, you will have access to all same method that you were using in Client !
-## How could i use RequestBuilder : 
+## How could i use RequestBuilder ? 
 
 Lets dive into the possibity of the RequestBuilder ! 
 
@@ -302,7 +303,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamMultipart
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentMultipartBody(new StringContent("MyCustomContent"), "CUSTOM_CONTENT_SECTION");
 ```
 
-## How could i implement a custom BaseClient.
+## How could i implement a custom BaseClient ?
 
 **NotoriousClient** is entirely designed to be infinitely extensible. 
 
@@ -357,3 +358,15 @@ public class UserClient : BearerAuthClient
 }
 ```
 This is your turn to play with it, you could image everything you want, adding custom authentication, custom company headers, logging !
+
+## How can i use the request's builder in standalone ? 
+
+You can create a standalone builder by instantiating RequestBuilder.
+```csharp
+
+// Dont forget to use IRequestBuilder to have access to extensions method !
+IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
+
+```
+
+Then, you will have access to all same method that you were using in Client !

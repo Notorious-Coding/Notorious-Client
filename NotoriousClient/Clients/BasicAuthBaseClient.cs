@@ -37,13 +37,5 @@ namespace NotoriousClient.Clients
         /// <param name="method">Request's method (GET, POST, PUT, DELETE...).</param>
         protected override IRequestBuilder GetBuilder(string route, Method method = Method.Get)
             => base.GetBuilder(route, method).WithAuthentication(_login, _password);
-
-        /// <summary>
-        /// Get preconfigured <see cref="IRequestBuilder"/> with Basic Authentication.
-        /// </summary>
-        /// <param name="route">Request's endpoint.</param>
-        /// <param name="method">Request's method (GET, POST, PUT, DELETE...).</param>
-        protected override IRequestBuilder GetBuilder(Endpoint endpoint)
-            => base.GetBuilder(endpoint).WithAuthentication(_login, _password);
     }
 }
