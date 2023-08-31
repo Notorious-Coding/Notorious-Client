@@ -10,7 +10,7 @@
 - [Getting started](#getting-started)
 - [How could i use RequestBuilder ?](#how-could-i-use-requestbuilder)
 - [How could i implement a custom BaseClient](#how-could-i-implement-a-custom-baseclient)
-- [How can i use requestBuilder in Standalone ?](#how-can-i-use-the-requests-builder-in-standalone)
+- [How could i use requestBuilder in Standalone ?](#how-can-i-use-the-requests-builder-in-standalone)
 
 
 ## Support
