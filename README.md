@@ -2,6 +2,8 @@
 
 **Notorious Client** is meant to simplify the sending of HTTP requests through a fluent builder and an infinitely extensible client system.
 
+[![NuGet](http://img.shields.io/nuget/vpre/NotoriousClient.svg?label=NuGet)](https://www.nuget.org/packages/NotoriousClient/)
+
 ## Summary
 
 - [Support](#support)
