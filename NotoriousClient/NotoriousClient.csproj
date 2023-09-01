@@ -6,12 +6,13 @@
 		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Brice SCHUMACHER</Authors>
 		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +24,7 @@
 	<ItemGroup>
 		<None Include="..\icon.png" Pack="true" PackagePath="" Visible="False" />
 		<None Include="..\README.md" Pack="true" PackagePath="" Visible="False" />
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" Visible="False" />
 	</ItemGroup>
 
 </Project>
