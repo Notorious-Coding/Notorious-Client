@@ -24,7 +24,7 @@
 - Body serialisation as JSON, powered by Newtonsoft, but customisable.
 - Easy handling of request's authentication
 - Infinitely extensible system.
-- Permit clean code.
+- Allow you to build maintanable and testable API Client.
 
 ## Motivation
 
