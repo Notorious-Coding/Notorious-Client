@@ -124,11 +124,8 @@ Last but not least, add everything to your dependency injection.
 
 ```csharp
 services.AddHttpClient();
-services.AddScoped<IRequestSender, RequestSender>();
-services.AddScoped<IUserClient>((serviceProvider) =>
-{
-    new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/");
-});
+services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(serviceProvider.GetRequiredService<IHttpClientFactory>()));
+services.AddScoped((serviceProvider) => new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/"));
 ```
 
 
