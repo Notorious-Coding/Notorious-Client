@@ -18,24 +18,25 @@ HttpRequestMessage request = requestBuilder
     .Build();
 
 
-new RequestSender(null as IHttpClientFactory);
+//new RequestSender(null as IHttpClientFactory);
 
 
 var services = new ServiceCollection();
 
 services.AddHttpClient();
-services.AddScoped<IRequestSender, RequestSender>();
+services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(serviceProvider.GetRequiredService<IHttpClientFactory>()));
 services.AddScoped((serviceProvider) => new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/"));
 
-
-
+ServiceProvider provider = services.BuildServiceProvider();
+Console.WriteLine(provider);
+UserClient userClient = provider.GetRequiredService<UserClient>();
 public class User
 {
 
 }
 public class UserClient : BaseClient
 {
-    private Endpoint GET_USERS_ENDPOINT = new Endpoint("/api/users", Method.Get); 
+    private Endpoint GET_USERS_ENDPOINT = new Endpoint("/api/users", Method.Get);
     private Endpoint GET_USER_ENDPOINT = new Endpoint("/api/users/{id}", Method.Get);
     private Endpoint CREATE_USER_ENDPOINT = new Endpoint("/api/users", Method.Post);
     public UserClient(IRequestSender sender, string url) : base(sender, url)
