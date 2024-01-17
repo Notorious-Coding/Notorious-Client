@@ -79,3 +79,46 @@ public class UserClient : BaseClient
         return response.ReadAs<IEnumerable<User>>();
     }
 }
+
+interface ITotoBuilder : IRequestBuilder
+{
+    public ITotoBuilder AddToto();
+}
+
+public class TotoBuilder : RequestBuilder, ITotoBuilder
+{
+    string toto = "";
+    public TotoBuilder(string url, string route, Method method) : base(url, route, method)
+    {
+    }
+
+    public override HttpRequestMessage Build()
+    {
+        HttpRequestMessage request =  base.Build();
+        request.Headers.Add("TOTO", toto);
+        return request;
+    }
+
+    ITotoBuilder ITotoBuilder.AddToto()
+    {
+        toto = "toto";
+        return this;
+    }
+}
+
+
+public class TotoClient : BaseClient
+{
+    public TotoClient(IRequestSender sender, string url) : base(sender, url)
+    {
+    }
+
+    public async Task GetToto()
+    {
+    }
+
+    private ITotoBuilder GetTotoBuilder()
+    {
+        return new TotoBuilder("", "", method: Method.Get);
+    }
+}
