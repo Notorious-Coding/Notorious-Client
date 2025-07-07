@@ -16,7 +16,7 @@
 
 ## Support
 
-- Net6/7
+- Net9
 
 ## Features
 
