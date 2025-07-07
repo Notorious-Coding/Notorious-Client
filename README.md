@@ -14,7 +14,6 @@
 - [How could i implement a custom BaseClient](#how-could-i-implement-a-custom-baseclient)
 - [How could i use requestBuilder in Standalone ?](#how-can-i-use-the-requests-builder-in-standalone)
 
-
 ## Support
 
 - Net6/7
@@ -23,7 +22,7 @@
 
 - Easy building of HttpRequestMessage
 - Easy building of multipart/form-data requests
-- Body serialisation as JSON, powered by Newtonsoft, but customisable.
+- Body serialisation as JSON, powered by System.Text.Json, but customisable.
 - Easy handling of request's authentication
 - Infinitely extensible system.
 - Allow you to build maintanable and testable API Client.
@@ -39,11 +38,12 @@ First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). 
 ```
 PM> Install-Package NotoriousClient
 ```
+
 Or from the .NET CLI as:
+
 ```
 dotnet add package NotoriousClient
 ```
-
 
 Then create a client, and inherit from BaseClient :
 
@@ -128,10 +128,9 @@ services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(servic
 services.AddScoped((serviceProvider) => new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/"));
 ```
 
+## How could i use RequestBuilder ?
 
-## How could i use RequestBuilder ? 
-
-Lets dive into the possibity of the RequestBuilder ! 
+Lets dive into the possibity of the RequestBuilder !
 
 ### Configure URN, URL, and http verb.
 
@@ -142,6 +141,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get);
 ### Configure URI parameters
 
 **Add URL parameters**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users/{id}", Method.Get).AddEndpointParameter("id", "myfakeid");
 
@@ -167,6 +167,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).AddQueryParameters(
 ### Configure request's headers
 
 **Add custom headers**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeader("id", "myfakeid");
 
@@ -178,6 +179,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).AddCustomHeaders(he
 ```
 
 **Add accept header**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithCustomAcceptMediaType("application/json");
 
@@ -186,18 +188,21 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithCustomAcceptMed
 ### Authentication
 
 **Add basic authentication**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("login", "password");
 
 ```
 
 **Add bearer authentication**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication("token");
 
 ```
 
 **Add custom scheme authentication**
+
 ```csharp
 public class NotoriousAuthentication : IAuthenticationInformation
 {
@@ -220,6 +225,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithAuthentication(
 ### Add body to classic request
 
 **Add body as JSON**
+
 ```csharp
 User user = GetUsersFromDb()
 
@@ -228,6 +234,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user);
 ```
 
 **Add body as JSON with a custom serializer**
+
 ```csharp
 
 public class CustomSerializer : IJsonSerializer
@@ -245,6 +252,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonBody(user, 
 ```
 
 **Add body as Stream**
+
 ```csharp
 Stream stream = GetFileStream("C:/Crown/BIG.png")
 
@@ -253,6 +261,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamBody(stre
 ```
 
 **Add body as HTTP Content**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentBody(new StringContent("MyCustomContent"));
 ```
@@ -263,8 +272,8 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentBody(new
 
 > :warning: Note that you CAN'T use multipart bodies if you already added a classic body to the request
 
-
 **Add body as JSON**
+
 ```csharp
 User user = GetUsersFromDb()
 
@@ -273,6 +282,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBo
 ```
 
 **Add body as JSON with a custom serializer**
+
 ```csharp
 
 public class CustomSerializer : IJsonSerializer
@@ -290,6 +300,7 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithJsonMultipartBo
 ```
 
 **Add body as Stream**
+
 ```csharp
 Stream stream = GetFileStream("C:/Crown/BIG.png")
 
@@ -298,13 +309,14 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamMultipart
 ```
 
 **Add body as HTTP Content**
+
 ```csharp
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentMultipartBody(new StringContent("MyCustomContent"), "CUSTOM_CONTENT_SECTION");
 ```
 
 ## How could i implement a custom BaseClient ?
 
-**NotoriousClient** is entirely designed to be infinitely extensible. 
+**NotoriousClient** is entirely designed to be infinitely extensible.
 
 Let's say you need to get a token from an API before every request.
 
@@ -321,9 +333,9 @@ public class BearerAuthClient : BaseClient
 
     protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get)
     {
-        // Get your token every time you create a request. 
+        // Get your token every time you create a request.
         string token = await GetToken();
-        
+
         // Return a preconfigured builder with your token !
         return (await base.GetBuilderAsync(route, method)).WithAuthentication(token);
     }
@@ -356,11 +368,13 @@ public class UserClient : BearerAuthClient
     }
 }
 ```
+
 This is your turn to play with it, you could image everything you want, adding custom authentication, custom company headers, logging !
 
-## How can i use the request's builder in standalone ? 
+## How can i use the request's builder in standalone ?
 
 You can create a standalone builder by instantiating RequestBuilder.
+
 ```csharp
 
 // Dont forget to use IRequestBuilder to have access to extensions method !
