@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Description>A fluent HTTPResponseMessage builder with fully extendable API Client implementation.</Description>
 		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
