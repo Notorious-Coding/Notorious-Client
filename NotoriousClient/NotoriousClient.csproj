@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Description>A fluent HTTPResponseMessage builder with fully extendable API Client implementation.</Description>
 		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.0.1</Version>
+		<Version>2.0.0</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Brice SCHUMACHER</Authors>
 		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>
@@ -17,7 +17,6 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

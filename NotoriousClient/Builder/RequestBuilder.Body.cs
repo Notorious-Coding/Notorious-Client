@@ -8,7 +8,7 @@ namespace NotoriousClient.Builder
         /// <summary>
         /// Default JSON Converter.
         /// </summary>
-        protected IJsonSerializer DefaultJsonConverter = new NewtonsoftJsonSerializer();
+        protected IJsonSerializer DefaultJsonConverter = new SystemTextJsonSerializer();
 
         private List<Body> _bodies = new List<Body>();
         private bool? _isMultipartRequest = null;

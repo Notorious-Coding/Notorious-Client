@@ -1,0 +1,36 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: PreRelease Workflow
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  
+jobs:
+  publish:
+    env: 
+      CONFIGURATION: 'Release'
+      DOTNET_VERSION: '9.0'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test
+      run: dotnet test NotoriousClient.Tests.Unit --no-build --verbosity normal
+    - name: Pack
+      run: dotnet pack -c ${{ env.CONFIGURATION }}  -o out --version-suffix "beta.${{ github.run_number }}"
+    - name: Push
+      if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+      run: dotnet nuget push out/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
