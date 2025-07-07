@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text.Json;
 
 namespace NotoriousClient.Converters
 {
     /// <summary>
     /// Serialize object to JSON using NewtonsoftJson.
     /// </summary>
-    public class NewtonsoftJsonSerializer : IJsonSerializer
+    public class SystemTextJsonSerializer : IJsonSerializer
     {
         public string ConvertToJson(object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return JsonSerializer.Serialize(obj);
         }
     }
 }

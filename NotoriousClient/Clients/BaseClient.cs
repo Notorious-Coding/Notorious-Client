@@ -23,7 +23,8 @@ namespace NotoriousClient.Clients
         protected BaseClient(IRequestSender sender, string url)
         {
             ArgumentNullException.ThrowIfNull(sender, nameof(sender));
-            if(string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            ArgumentException.ThrowIfNullOrEmpty(url, nameof(url));
+
             Sender = sender;
             _url = url;
         }

@@ -12,7 +12,7 @@ namespace NotoriousClient.Clients
         private readonly string _password;
 
         /// <summary>
-        /// Initialize a new instance of <see cref="SynchronousBaseClient"/>.
+        /// Initialize a new instance of <see cref="BasicAuthBaseClient"/>.
         /// </summary>
         /// <param name="sender">Class used to send <see cref="HttpRequestMessage"/>.</param>
         /// <param name="url">Base URL of api (ex: https://myapi.com/).</param>
@@ -20,11 +20,9 @@ namespace NotoriousClient.Clients
         /// <param name="password">User's password.</param>
         protected BasicAuthBaseClient(IRequestSender sender, string url, string login, string password) : base(sender, url)
         {
-            if (string.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
-            if (string.IsNullOrEmpty(login)) throw new ArgumentNullException(nameof(login));
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
-
             ArgumentNullException.ThrowIfNull(sender, nameof(sender));
+            ArgumentException.ThrowIfNullOrEmpty(login, nameof(login));
+            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
 
             _login = login;
             _password = password;
