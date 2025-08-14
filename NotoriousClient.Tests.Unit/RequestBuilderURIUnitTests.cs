@@ -124,7 +124,7 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas/1", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas/1", request.RequestUri.AbsoluteUri);
         }
 
         [GWTFact(given: "a request with one endpoint parameters and an endpoint without replacement token",
