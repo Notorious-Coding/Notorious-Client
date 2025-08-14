@@ -1,6 +1,4 @@
-﻿using System.Web;
-
-namespace NotoriousClient.Builder
+﻿namespace NotoriousClient.Builder
 {
     public partial class RequestBuilder : IRequestBuilder
     {
@@ -80,14 +78,13 @@ namespace NotoriousClient.Builder
         {
             if (queryParams.Count > 0)
             {
-                string queryParamsString = string.Join("&", queryParams.Select(kvp => string.Format("{0}={1}", HttpUtility.UrlEncode(kvp.Key), HttpUtility.UrlEncode(kvp.Value))));
+                string queryParamsString = string.Join("&", queryParams.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
                 return string.Format(uri + "?{0}", queryParamsString);
             }
             else
             {
                 return uri;
             }
-
         }
 
         private string HandleUriEndPointParams(string uri, Dictionary<string, string> endPointParams)
