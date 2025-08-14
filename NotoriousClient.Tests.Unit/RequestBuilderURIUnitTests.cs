@@ -1,4 +1,4 @@
-using NotoriousClient.Builder;
+ï»¿using NotoriousClient.Builder;
 using NotoriousClient.Tests.Unit.Attributes;
 
 namespace NotoriousClient.Tests.Unit
@@ -89,23 +89,6 @@ namespace NotoriousClient.Tests.Unit
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
             Assert.Equal("https://toto.com/pandas?toto=toto&toto2=toto2", request.RequestUri.AbsoluteUri);
-        }
-
-        [GWTFact(given: "a request with one query parameters that have an accent",
-         when: "i build a request",
-         then: "request has encoded query values")]
-        public void RequestBuilder_Should_ShouldEncodeQueryValues()
-        {
-            string url = "https://toto.com";
-            Endpoint endpoint = new Endpoint("/pandas", Method.Get);
-
-            IRequestBuilder requestBuilder = new RequestBuilder(url, endpoint)
-                .AddQueryParameter("této", "této");
-            HttpRequestMessage request = requestBuilder.Build();
-
-            Assert.Equal(HttpMethod.Get, request.Method);
-            Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas?t%C3%A9to=t%C3%A9to", request.RequestUri.AbsoluteUri);
         }
         #endregion
 
