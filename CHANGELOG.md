@@ -14,7 +14,7 @@
 
 - Minor bug fixes on tools (CI, csproj, etc...)
 
-## 202
+## 2.0.2
 
 ### 🐛 Bug Fixes
 
