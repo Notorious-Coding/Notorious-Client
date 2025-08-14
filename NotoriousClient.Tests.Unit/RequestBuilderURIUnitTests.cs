@@ -6,8 +6,8 @@ namespace NotoriousClient.Tests.Unit
     public class RequestBuilderURIUnitTests
     {
         #region URI
-        [GWTFact(given: "a url, an endpoint, and an HTTP Verb", 
-                 when: "i build a request", 
+        [GWTFact(given: "a url, an endpoint, and an HTTP Verb",
+                 when: "i build a request",
                  then: "request has right url, endpoint and verb")]
         public void RequestBuilder_Should_HaveRightUrlEndpointAndVerb()
         {
@@ -15,11 +15,11 @@ namespace NotoriousClient.Tests.Unit
             Endpoint endpoint = new Endpoint("/pandas", Method.Get);
 
             RequestBuilder requestBuilder = new RequestBuilder(url, endpoint);
-            HttpRequestMessage request  = requestBuilder.Build();
+            HttpRequestMessage request = requestBuilder.Build();
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas", request.RequestUri.AbsoluteUri);
         }
 
         [GWTFact(given: "a url with and end slash, an endpoint with a start slash, and an HTTP Verb",
@@ -35,7 +35,7 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas", request.RequestUri.AbsoluteUri);
         }
 
         [GWTFact(given: "a url, an endpoint, and an HTTP Verb",
@@ -51,7 +51,7 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas", request.RequestUri.AbsoluteUri);
         }
         #endregion
 
@@ -70,7 +70,7 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas?toto%3dtoto", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas?toto=toto", request.RequestUri.AbsoluteUri);
         }
 
         [GWTFact(given: "a request with two query parameters",
@@ -88,7 +88,24 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Equal(HttpMethod.Get, request.Method);
             Assert.NotNull(request.RequestUri);
-            Assert.Equal("https://toto.com/pandas?toto%3dtoto%26toto2%3dtoto2", request.RequestUri!.ToString());
+            Assert.Equal("https://toto.com/pandas?toto=toto&toto2=toto2", request.RequestUri.AbsoluteUri);
+        }
+
+        [GWTFact(given: "a request with one query parameters that have an accent",
+         when: "i build a request",
+         then: "request has encoded query values")]
+        public void RequestBuilder_Should_ShouldEncodeQueryValues()
+        {
+            string url = "https://toto.com";
+            Endpoint endpoint = new Endpoint("/pandas", Method.Get);
+
+            IRequestBuilder requestBuilder = new RequestBuilder(url, endpoint)
+                .AddQueryParameter("této", "této");
+            HttpRequestMessage request = requestBuilder.Build();
+
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.NotNull(request.RequestUri);
+            Assert.Equal("https://toto.com/pandas?t%C3%A9to=t%C3%A9to", request.RequestUri.AbsoluteUri);
         }
         #endregion
 
