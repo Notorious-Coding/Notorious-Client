@@ -1,11 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Microsoft.Extensions.DependencyInjection;
+
 using NotoriousClient.Builder;
-using NotoriousClient.Builder.Authentication;
 using NotoriousClient.Clients;
-using NotoriousClient.Converters;
-using NotoriousClient.Extensions;
 using NotoriousClient.Sender;
 
 Console.WriteLine("Hello, World!");
@@ -25,7 +23,8 @@ HttpRequestMessage request = requestBuilder
 var services = new ServiceCollection();
 
 services.AddHttpClient();
-services.AddDefaultSender();
+services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(serviceProvider.GetRequiredService<IHttpClientFactory>()));
+
 services.AddScoped((serviceProvider) => new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/"));
 
 ServiceProvider provider = services.BuildServiceProvider();
@@ -95,7 +94,7 @@ public class TotoBuilder : RequestBuilder, ITotoBuilder
 
     public override HttpRequestMessage Build()
     {
-        HttpRequestMessage request =  base.Build();
+        HttpRequestMessage request = base.Build();
         request.Headers.Add("TOTO", toto);
         return request;
     }
