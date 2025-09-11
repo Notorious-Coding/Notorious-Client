@@ -5,6 +5,7 @@ using NotoriousClient.Builder;
 using NotoriousClient.Builder.Authentication;
 using NotoriousClient.Clients;
 using NotoriousClient.Converters;
+using NotoriousClient.Extensions;
 using NotoriousClient.Sender;
 
 Console.WriteLine("Hello, World!");
@@ -24,7 +25,7 @@ HttpRequestMessage request = requestBuilder
 var services = new ServiceCollection();
 
 services.AddHttpClient();
-services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(serviceProvider.GetRequiredService<IHttpClientFactory>()));
+services.AddDefaultSender();
 services.AddScoped((serviceProvider) => new UserClient(serviceProvider.GetRequiredService<IRequestSender>(), "http://my.api.com/"));
 
 ServiceProvider provider = services.BuildServiceProvider();

@@ -5,7 +5,7 @@
     /// </summary>
     public class RequestSender : IRequestSender
     {
-        private readonly HttpClient _client;
+        private readonly IHttpClientFactory _factory;
 
         /// <summary>
         /// Initialize a new instance of <see cref="RequestSender"/>.
@@ -15,13 +15,13 @@
         public RequestSender(IHttpClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-            _client = factory.CreateClient();
+            _factory = factory;
         }
 
         /// <inheritdoc/> 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage response =  await _client.SendAsync(request, cancellationToken);
+            HttpResponseMessage response = await _factory.CreateClient().SendAsync(request, cancellationToken);
 
             return response;
         }
@@ -29,7 +29,7 @@
         /// <inheritdoc/> 
         public HttpResponseMessage Send(HttpRequestMessage request)
         {
-            return _client.Send(request);
+            return _factory.CreateClient().Send(request);
         }
     }
 }

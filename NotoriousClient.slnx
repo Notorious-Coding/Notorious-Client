@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/CI/">
+    <File Path=".github/workflows/prerelease.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/Docs/">
+    <File Path="CHANGELOG.md" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="NotoriousClient.Sample/NotoriousClient.Sample.csproj" />
+  <Project Path="NotoriousClient.Tests.Unit/NotoriousClient.Tests.Unit.csproj" />
+  <Project Path="NotoriousClient/NotoriousClient.csproj" />
+</Solution>
