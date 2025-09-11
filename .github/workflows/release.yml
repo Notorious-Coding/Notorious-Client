@@ -10,7 +10,7 @@ jobs:
   publish:
     env: 
       CONFIGURATION: 'Release'
-      DOTNET_VERSION: '8.0'
+      DOTNET_VERSION: '9.0'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Restore dependencies
-      run: dotnet restore NotoriousClient/NotoriousClient.csproj
+      run: dotnet restore
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
