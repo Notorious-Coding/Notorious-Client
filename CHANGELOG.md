@@ -32,7 +32,7 @@
 ### ✨ Features
 
 - Added support for Versioned API routes via `VersionedEndpoint` class, and `GetBuilder(VersionedEndpoint endpoint)` method signatures.
-- Added support for M2M authentication via M2MAuthenticationClient.
+- Added support for ClientCredentials OAuth authentication flow via `ClientCredentialsBaseClient` and `CachedClientCredentialsBaseClient`.
 
 ### 🛠 Technical
 
