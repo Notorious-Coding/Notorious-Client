@@ -148,11 +148,10 @@ new RequestBuilder("https://toto.com", endpoint);
 or with `VersionedEndpoint` class :
 
 ```csharp
-VersionedEndpoint endpoint = new VersionedEndpoint("/{apiVersion}/users", Method.Get, "v1.0");
-new RequestBuilder("https://toto.com", endpoint);
+VersionedEndpoint endpoint = new VersionedEndpoint("/users", Method.Get, "v1.0");
+new RequestBuilder("https://toto.com/api", endpoint); // Will result in "https://toto.com/api/v1.0/users"
 ```
 
-> :information_source: You can override api version parameter key by changing RequestBuilder.ApiVersionKey static property.
 
 ### Configure URI parameters
 
