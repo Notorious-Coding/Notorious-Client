@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<Description>A fluent HTTPResponseMessage builder with fully extendable API Client implementation.</Description>
 		<PackageId>NotoriousClient</PackageId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<VersionPrefix>2.0.3</VersionPrefix>
+		<VersionPrefix>2.1.0</VersionPrefix>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Brice SCHUMACHER</Authors>
 		<RepositoryUrl>https://github.com/Notorious-Coding/Notorious-Client/</RepositoryUrl>
