@@ -53,6 +53,22 @@ namespace NotoriousClient.Tests.Unit
             Assert.NotNull(request.RequestUri);
             Assert.Equal("https://toto.com/pandas", request.RequestUri.AbsoluteUri);
         }
+
+        [GWTFact(given: "a url, an endpoint, an HTTP Verb and a version",
+                 when: "i build a request",
+                 then: "request has right url, endpoint, verb, and version")]
+        public void RequestBuilder_Should_HandleVersionProperly()
+        {
+            string url = "https://toto.com/api";
+            VersionedEndpoint endpoint = new VersionedEndpoint("pandas", Method.Get, "v1.0");
+
+            RequestBuilder requestBuilder = new RequestBuilder(url, endpoint);
+            HttpRequestMessage request = requestBuilder.Build();
+
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.NotNull(request.RequestUri);
+            Assert.Equal("https://toto.com/api/v1.0/pandas", request.RequestUri.AbsoluteUri);
+        }
         #endregion
 
         #region QueryParams

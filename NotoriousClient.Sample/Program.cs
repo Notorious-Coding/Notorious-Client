@@ -36,9 +36,8 @@ public class User
 }
 public class UserClient : BaseClient
 {
-    private Endpoint GET_USERS_ENDPOINT = new Endpoint("/api/users", Method.Get);
-    private Endpoint GET_USER_ENDPOINT = new Endpoint("/api/users/{id}", Method.Get);
-    private Endpoint CREATE_USER_ENDPOINT = new Endpoint("/api/users", Method.Post);
+    private Endpoint GET_USERS_ENDPOINT = new Endpoint("/users", Method.Get);
+    private VersionedEndpoint CREATE_USER_ENDPOINT = new VersionedEndpoint("/users", Method.Post, "v1.0");
     public UserClient(IRequestSender sender, string url) : base(sender, url)
     {
     }
@@ -48,18 +47,6 @@ public class UserClient : BaseClient
         HttpRequestMessage request = GetBuilder(GET_USERS_ENDPOINT)
             .WithAuthentication("username", "password")
             .AddQueryParameter("limit", "100")
-            .Build();
-
-        HttpResponseMessage response = await Sender.SendAsync(request);
-
-        return response.ReadAs<IEnumerable<User>>();
-    }
-
-    public async Task<IEnumerable<User>> GetUser(int id)
-    {
-        HttpRequestMessage request = GetBuilder(GET_USERS_ENDPOINT)
-            .WithAuthentication("username", "password")
-            .AddEndpointParameter("id", id.ToString())
             .Build();
 
         HttpResponseMessage response = await Sender.SendAsync(request);

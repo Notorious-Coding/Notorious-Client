@@ -33,7 +33,7 @@ namespace NotoriousClient.Clients
         /// </summary>
         /// <param name="route">Request's Route.</param>
         /// <param name="method">Request's method (GET, POST, PUT, DELETE...).</param>
-        protected override IRequestBuilder GetBuilder(string route, Method method = Method.Get)
+        protected override IRequestBuilder GetBuilder(string route, Method method = Method.Get, string? version = null)
             => base.GetBuilder(route, method).WithAuthentication(_login, _password);
     }
 }

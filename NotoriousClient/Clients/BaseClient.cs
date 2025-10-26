@@ -16,7 +16,7 @@ namespace NotoriousClient.Clients
         protected IRequestSender Sender { get; }
 
         /// <summary>
-        /// Initialize a new instance of <see cref="SynchronousBaseClient"/>.
+        /// Initialize a new instance of <see cref="BaseClient"/>.
         /// </summary>
         /// <param name="sender">Class used to send <see cref="HttpRequestMessage"/>.</param>
         /// <param name="url">Base URL of api (ex: https://myapi.com/).</param>
@@ -34,8 +34,8 @@ namespace NotoriousClient.Clients
         /// </summary>
         /// <param name="route">Request's Route.</param>
         /// <param name="method">Request's Method (GET, POST, PUT, DELETE...).</param>
-        protected virtual IRequestBuilder GetBuilder(string route, Method method = Method.Get)
-            => new RequestBuilder(_url, route, method);
+        protected virtual IRequestBuilder GetBuilder(string route, Method method = Method.Get, string? version = null)
+            => new RequestBuilder(_url, route, version, method);
 
         /// <summary>
         /// Get preconfigured <see cref="IRequestBuilder"/>.
@@ -45,12 +45,19 @@ namespace NotoriousClient.Clients
             => GetBuilder(endpoint.Route, endpoint.Method);
 
         /// <summary>
+        /// Get preconfigured <see cref="IRequestBuilder"/> with versioning.
+        /// </summary>
+        /// <param name="endpoint">Request's <see cref="Endpoint"/>.</param>
+        protected IRequestBuilder GetBuilder(VersionedEndpoint endpoint)
+            => GetBuilder(endpoint.Route, endpoint.Method, endpoint.Version);
+
+        /// <summary>
         /// Get preconfigured <see cref="IRequestBuilder"/>.
         /// </summary>
         /// <param name="route">Request's Route.</param>
         /// <param name="method">Request's Method (GET, POST, PUT, DELETE...).</param>
-        protected virtual async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get)
-            => new RequestBuilder(_url, route, method);
+        protected virtual async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get, string? version = null)
+            => GetBuilder(route, method, version);
 
         /// <summary>
         /// Get preconfigured <see cref="IRequestBuilder"/>.
@@ -58,5 +65,12 @@ namespace NotoriousClient.Clients
         /// <param name="endpoint">Request's <see cref="Endpoint"/>.</param>
         protected Task<IRequestBuilder> GetBuilderAsync(Endpoint endpoint)
             => GetBuilderAsync(endpoint.Route, endpoint.Method);
+
+        /// <summary>
+        /// Get preconfigured <see cref="IRequestBuilder"/> with versioning.
+        /// </summary>
+        /// <param name="endpoint">Request's <see cref="VersionedEndpoint"/>.</param>
+        protected Task<IRequestBuilder> GetBuilderAsync(VersionedEndpoint endpoint)
+            => GetBuilderAsync(endpoint.Route, endpoint.Method, endpoint.Version);
     }
 }

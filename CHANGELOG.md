@@ -26,3 +26,14 @@
 
 - Fixed HttpClientFactory usage in default request sender
 - Migrate to SLNX
+
+## 2.1.0
+
+### ✨ Features
+
+- Added support for Versioned API routes via `VersionedEndpoint` class, and `GetBuilder(VersionedEndpoint endpoint)` method signatures.
+- Added support for M2M authentication via M2MAuthenticationClient.
+
+### 🛠 Technical
+
+- Overriding `GetBuilder` now changes the behaviour of `GetBuilderAsync`.

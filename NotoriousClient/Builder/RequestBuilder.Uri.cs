@@ -4,6 +4,7 @@
     {
         private string _url;
         private string _route;
+        private string? _version;
         private Dictionary<string, string> _queryParams = new Dictionary<string, string>();
         private Dictionary<string, string> _endpointParams = new Dictionary<string, string>();
         private const char START_ENDPOINT_PARAM = '{';
@@ -113,9 +114,10 @@
         private string GetUri()
         {
             var url = !_url.EndsWith("/") ? _url : _url.Substring(0, _url.Length - 1);
+            var version = !string.IsNullOrEmpty(_version) ? $"/{_version}" : string.Empty;
             var endpoint = _route.StartsWith("/") ? _route : $"/{_route}";
 
-            return url + endpoint;
+            return url + version + endpoint;
         }
         #endregion
     }

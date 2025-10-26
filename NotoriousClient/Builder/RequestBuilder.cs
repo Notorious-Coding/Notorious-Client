@@ -3,8 +3,8 @@
     ///<inheritdoc/>
     public partial class RequestBuilder : IRequestBuilder
     {
-        private Method _method;        
-        
+        private Method _method;
+
         /// <summary>
         /// Initialize a new instance of <see cref="RequestBuilder"/>.
         /// </summary>
@@ -20,14 +20,28 @@
         /// <summary>
         /// Initialize a new instance of <see cref="RequestBuilder"/>.
         /// </summary>
-        public RequestBuilder(string url, Endpoint endpoint)
+        public RequestBuilder(string url, Endpoint endpoint) : this(url, endpoint.Route, endpoint.Method)
+        {
+        }
+
+        /// <summary>
+        /// Initialize a new instance of <see cref="RequestBuilder"/>.
+        /// </summary>
+        public RequestBuilder(string url, string route, string? version, Method method)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException();
-            ArgumentNullException.ThrowIfNull(endpoint, nameof(endpoint));
-
+            if (string.IsNullOrEmpty(route)) throw new ArgumentNullException();
             _url = url;
-            _route = endpoint.Route;
-            _method = endpoint.Method;
+            _route = route;
+            _method = method;
+            _version = version;
+        }
+
+        /// <summary>
+        /// Initialize a new instance of <see cref="RequestBuilder"/>.
+        /// </summary>
+        public RequestBuilder(string url, VersionedEndpoint endpoint) : this(url, endpoint.Route, endpoint.Version, endpoint.Method)
+        {
         }
 
         ///<inheritdoc/>
