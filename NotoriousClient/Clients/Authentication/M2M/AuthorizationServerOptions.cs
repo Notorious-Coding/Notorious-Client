@@ -1,4 +1,4 @@
-﻿namespace NotoriousClient.Clients
+﻿namespace NotoriousClient.Clients.Authentication.M2M
 {
     public class AuthorizationServerOptions
     {
