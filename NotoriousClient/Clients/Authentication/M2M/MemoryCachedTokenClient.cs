@@ -1,33 +1,22 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-using NotoriousClient.Builder;
-using NotoriousClient.Clients.Authentication.Models;
+using NotoriousClient.Clients.Authentication.M2M.Models;
 using NotoriousClient.Sender;
 
-namespace NotoriousClient.Clients.Authentication
+namespace NotoriousClient.Clients.Authentication.M2M
 {
-    public class MemoryCachedClientCredentialsBaseClient : ClientCredentialsBaseClient
+    public class MemoryCachedTokenClient : TokenClient
     {
         private const int SKEW_IN_SECONDS = 60;
         private const int MinimumCacheExpiry = 1;
         private readonly IMemoryCache _cache;
 
-        public MemoryCachedClientCredentialsBaseClient(IRequestSender sender, IMemoryCache cache, IOptions<AuthorizationServerOptions> server) : base(sender, server)
+        public MemoryCachedTokenClient(IRequestSender sender, IMemoryCache cache, IOptions<AuthorizationServerOptions> server) : base(sender, server)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
-        /// <summary>
-        /// Get a preconfigured <see cref="IRequestBuilder"/> with Bearer Authentication using ClientCredentials OAuth flow.
-        /// </summary>
-        protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get, string? version = null)
-        {
-            DiscoveryDocument? discovery = await GetDiscoveryDocument();
-            TokenEndpointResponse response = await GetToken(discovery);
-
-            return (await base.GetBuilderAsync(route, method, version)).WithAuthentication(response.AccessToken);
-        }
 
         protected override async Task<TokenEndpointResponse> GetToken(DiscoveryDocument? discovery)
 

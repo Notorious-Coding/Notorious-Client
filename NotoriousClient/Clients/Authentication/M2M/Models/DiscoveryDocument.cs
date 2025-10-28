@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NotoriousClient.Clients.Authentication.Models
+namespace NotoriousClient.Clients.Authentication.M2M.Models
 {
     public class DiscoveryDocument
     {
