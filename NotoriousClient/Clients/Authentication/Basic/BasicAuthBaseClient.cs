@@ -1,7 +1,7 @@
 ﻿using NotoriousClient.Builder;
 using NotoriousClient.Sender;
 
-namespace NotoriousClient.Clients.Authentication
+namespace NotoriousClient.Clients.Authentication.BasicAuth
 {
     /// <summary>
     /// Base class for HTTP Client preconfigured with Basic Authentication.

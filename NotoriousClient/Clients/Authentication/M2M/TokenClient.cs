@@ -1,28 +1,26 @@
 ﻿using Microsoft.Extensions.Options;
 
 using NotoriousClient.Builder;
-using NotoriousClient.Clients.Authentication.Models;
+using NotoriousClient.Clients.Authentication.M2M.Models;
 using NotoriousClient.Sender;
 
-namespace NotoriousClient.Clients.Authentication
+namespace NotoriousClient.Clients.Authentication.M2M
 {
-    public class ClientCredentialsBaseClient : BaseClient
+    public class TokenClient : BaseClient, ITokenClient
     {
         protected IOptions<AuthorizationServerOptions> AuthenticationServerOptions { get; private init; }
         private readonly Endpoint DISCOVERY_ENDPOINT = new Endpoint("/.well-known/openid-configuration", Method.Get);
 
-        public ClientCredentialsBaseClient(IRequestSender sender, IOptions<AuthorizationServerOptions> server) : base(sender, server.Value.Authority)
+        public TokenClient(IRequestSender sender, IOptions<AuthorizationServerOptions> server) : base(sender, server.Value.Authority)
         {
             AuthenticationServerOptions = server ?? throw new ArgumentNullException(nameof(server));
         }
 
-        protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get, string? version = null)
+        public async Task<string> GetAccessToken()
         {
-            string tokenEndpoint = string.Empty;
-            DiscoveryDocument? discovery = await GetDiscoveryDocument();
-            TokenEndpointResponse response = await GetToken(discovery);
+            DiscoveryDocument? discord = await GetDiscoveryDocument();
 
-            return (await base.GetBuilderAsync(route, method, version)).WithAuthentication(response.AccessToken);
+            return (await GetToken(discord)).AccessToken;
         }
 
         protected virtual async Task<TokenEndpointResponse> GetToken(DiscoveryDocument? discovery)
