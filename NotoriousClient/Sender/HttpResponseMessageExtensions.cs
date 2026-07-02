@@ -15,9 +15,9 @@ namespace NotoriousClient.Sender
         /// <typeparam name="T">Type of response.</typeparam>
         /// <param name="response">Response to map.</param>
         /// <returns>Mapped content.</returns>
-        public static Task<T> ReadAsAsync<T>(this HttpResponseMessage response)
+        public static Task<T> ReadAsAsync<T>(this HttpResponseMessage response, IList<MediaTypeFormatter>? formatters = null)
         {
-            return response.Content.ReadAsAsync<T>(MediaTypeFormatters);
+            return response.Content.ReadAsAsync<T>(MediaTypeFormatters.Union(formatters ?? new List<MediaTypeFormatter>()));
         }
 
         /// <summary>

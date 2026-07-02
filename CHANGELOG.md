@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## 2.1.0
+### 🛠 Technical
+
+- Upgrade to .NET 10
+- Added 'ClientCredentialsBaseClient' support.
+- Added possibility to pass MediaTypeFormatters to 'HttpResponseMessageExtensions.ReadAsAsync<T>'
+
 ## 2.0.0
 
 ### 🛠 Technical
