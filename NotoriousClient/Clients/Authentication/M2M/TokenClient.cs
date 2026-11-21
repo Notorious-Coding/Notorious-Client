@@ -25,17 +25,26 @@ namespace NotoriousClient.Clients.Authentication.M2M
 
         protected virtual async Task<TokenEndpointResponse> GetToken(DiscoveryDocument? discovery)
         {
-            HttpRequestMessage request = new RequestBuilder(discovery.TokenEndpoint, "", Method.Post)
-            .WithContentBody(new FormUrlEncodedContent(new Dictionary<string, string>
+            if (string.IsNullOrEmpty(discovery?.TokenEndpoint))
+                throw new InvalidOperationException($"The discovery document of '{AuthenticationServerOptions.Value.Authority}' does not expose a token endpoint.");
+
+            // The token endpoint is an absolute URL given by the discovery document: no route to append.
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, discovery.TokenEndpoint)
             {
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
                     { "grant_type", "client_credentials" },
                     { "client_id", AuthenticationServerOptions.Value.ClientId },
                     { "client_secret", AuthenticationServerOptions.Value.ClientSecret },
                     { "audience", string.Join(" ", AuthenticationServerOptions.Value.Audiences) },
                     { "scope", string.Join(" ", AuthenticationServerOptions.Value.Scopes) }
-            })).Build();
+                })
+            };
 
-            return (await Sender.SendAsync(request)).ReadAs(AuthenticationJsonContext.Default.TokenEndpointResponse);
+            HttpResponseMessage response = await Sender.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.ReadAsAsync(AuthenticationJsonContext.Default.TokenEndpointResponse);
         }
 
         protected virtual async Task<DiscoveryDocument?> GetDiscoveryDocument()

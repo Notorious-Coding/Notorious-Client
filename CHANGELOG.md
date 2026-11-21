@@ -14,6 +14,11 @@
 - Client credentials token client now uses System.Text.Json source generation.
 - Tests migrated to xunit v3.
 
+### 🐛 Bug Fixes
+
+- Fixed a 'FormatException' when building a request combining endpoint parameters ('/users/{id}') and query parameters.
+- Fixed 'TokenClient' / 'MemoryCachedTokenClient' always throwing an 'ArgumentNullException' when requesting a token. A failed token request now throws an 'HttpRequestException'.
+
 ## 2.1.0
 ### 🛠 Technical
 
