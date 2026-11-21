@@ -11,8 +11,11 @@
 - [Motivation](#motivation)
 - [Getting started](#getting-started)
 - [How could i use RequestBuilder ?](#how-could-i-use-requestbuilder)
+- [How could i read responses ?](#how-could-i-read-responses)
 - [How could i implement a custom BaseClient](#how-could-i-implement-a-custom-baseclient)
+- [How could i call an API secured with client credentials ?](#how-could-i-call-an-api-secured-with-client-credentials)
 - [How could i use requestBuilder in Standalone ?](#how-can-i-use-the-requests-builder-in-standalone)
+- [Migrating from 2.x to 3.0](#migrating-from-2x-to-30)
 
 ## Support
 
@@ -23,7 +26,8 @@
 - Easy building of HttpRequestMessage
 - Easy building of multipart/form-data requests
 - Body serialisation as JSON, powered by System.Text.Json, but customisable.
-- Easy handling of request's authentication
+- Response deserialisation powered by System.Text.Json, with trimming / native AOT friendly overloads.
+- Easy handling of request's authentication (basic, bearer, custom schemes, OAuth2 client credentials).
 - Infinitely extensible system.
 - Allow you to build maintanable and testable API Client.
 
@@ -93,7 +97,7 @@ private Endpoint GET_USER_ENDPOINT = new Endpoint("/api/users/{id}", Method.Get)
 
 public async Task<User> GetUser(int id)
 {
-    HttpRequestMessage request = GetBuilder(GET_USERS_ENDPOINT)
+    HttpRequestMessage request = GetBuilder(GET_USER_ENDPOINT)
         .WithAuthentication("username", "password")
         .AddEndpointParameter("id", id.ToString())
         .Build();
@@ -329,6 +333,51 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithStreamMultipart
 new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentMultipartBody(new StringContent("MyCustomContent"), "CUSTOM_CONTENT_SECTION");
 ```
 
+## How could i read responses ?
+
+`NotoriousClient.Sender` provides extension methods on `HttpResponseMessage`, each one with a synchronous and an asynchronous version.
+
+```csharp
+HttpResponseMessage response = await Sender.SendAsync(request);
+
+User user = await response.ReadAsAsync<User>();     // or response.ReadAs<User>()
+string raw = await response.ReadAsStringAsync();     // or response.ReadAsString()
+byte[] bytes = await response.ReadAsByteArrayAsync(); // or response.ReadAsByteArray()
+Stream stream = await response.ReadAsStreamAsync();  // or response.ReadAsStream()
+```
+
+**JSON deserialization**
+
+`ReadAs<T>` / `ReadAsAsync<T>` are powered by System.Text.Json. By default, they use `JsonSerializerDefaults.Web` options, so property names are matched **case-insensitively** (`{"name": "Toto"}` maps to `User.Name`).
+
+You can provide your own options :
+
+```csharp
+JsonSerializerOptions options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+{
+    Converters = { new JsonStringEnumConverter() }
+};
+
+User user = await response.ReadAsAsync<User>(options);
+```
+
+> :warning: Responses must have a JSON media type (`application/json`, `application/problem+json`, ...) or no `Content-Type` at all, otherwise an `InvalidOperationException` is thrown.
+
+**Trimming and native AOT**
+
+The overloads above rely on reflection and are annotated with `[RequiresUnreferencedCode]` / `[RequiresDynamicCode]`. If your application is trimmed or published with native AOT, use [System.Text.Json source generation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation) and pass the generated `JsonTypeInfo<T>` :
+
+```csharp
+[JsonSerializable(typeof(User))]
+[JsonSerializable(typeof(IEnumerable<User>))]
+internal partial class UserJsonContext : JsonSerializerContext
+{
+}
+
+User user = await response.ReadAsAsync(UserJsonContext.Default.User);
+IEnumerable<User> users = response.ReadAs(UserJsonContext.Default.IEnumerableUser);
+```
+
 ## How could i implement a custom BaseClient ?
 
 **NotoriousClient** is entirely designed to be infinitely extensible.
@@ -346,19 +395,19 @@ public class BearerAuthClient : BaseClient
         _tokenClient = tokenClient;
     }
 
-    protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get)
+    protected override async Task<IRequestBuilder> GetBuilderAsync(string route, Method method = Method.Get, string? version = null)
     {
         // Get your token every time you create a request.
         string token = await GetToken();
 
         // Return a preconfigured builder with your token !
-        return (await base.GetBuilderAsync(route, method)).WithAuthentication(token);
+        return (await base.GetBuilderAsync(route, method, version)).WithAuthentication(token);
     }
 
     public async Task<string> GetToken()
     {
         // Handle token logic here.
-        return await _tokenClient.GetToken();
+        return await _tokenClient.GetAccessToken();
     }
 }
 
@@ -366,11 +415,11 @@ public class UserClient : BearerAuthClient
 {
     private Endpoint CREATE_USER_ENDPOINT = new Endpoint("/api/users", Method.Post);
 
-    public UserClient(IRequestSender sender, string url) : base(sender, url)
+    public UserClient(IRequestSender sender, string url, ITokenClient tokenClient) : base(sender, url, tokenClient)
     {
     }
 
-    public async Task<IEnumerable<User>> CreateUser(User user)
+    public async Task<User> CreateUser(User user)
     {
         // Every builded request will be configured with bearer authentication !
         HttpRequestMessage request = (await GetBuilderAsync(CREATE_USER_ENDPOINT))
@@ -386,6 +435,67 @@ public class UserClient : BearerAuthClient
 
 This is your turn to play with it, you could image everything you want, adding custom authentication, custom company headers, logging !
 
+> :bulb: For simple cases, `BasicAuthBaseClient` (basic authentication) and `ClientCredentialsBaseClient` (see below) are provided out of the box.
+
+## How could i call an API secured with client credentials ?
+
+For machine-to-machine calls, inherit from `ClientCredentialsBaseClient`. Every request built with `GetBuilderAsync` gets a bearer token obtained through the OAuth2 **client credentials** flow.
+
+```csharp
+public class UserClient : ClientCredentialsBaseClient
+{
+    private Endpoint GET_USERS_ENDPOINT = new Endpoint("/api/users", Method.Get);
+
+    public UserClient(ITokenClient tokenClient, IRequestSender sender, string url) : base(tokenClient, sender, url)
+    {
+    }
+
+    public async Task<IEnumerable<User>> GetUsers()
+    {
+        // Use GetBuilderAsync : GetBuilder does not add the token.
+        HttpRequestMessage request = (await GetBuilderAsync(GET_USERS_ENDPOINT)).Build();
+
+        HttpResponseMessage response = await Sender.SendAsync(request);
+
+        return await response.ReadAsAsync<IEnumerable<User>>();
+    }
+}
+```
+
+The token endpoint is discovered from the authority's `/.well-known/openid-configuration` document. Configure your authorization server :
+
+```json
+{
+  "AuthorizationServer": {
+    "Authority": "https://auth.my-company.com/realms/my-realm",
+    "ClientId": "my-client",
+    "ClientSecret": "my-secret",
+    "Audiences": [ "users-api" ],
+    "Scopes": [ "users.read" ]
+  }
+}
+```
+
+Then register everything :
+
+```csharp
+services.AddHttpClient();
+services.AddMemoryCache();
+services.Configure<AuthorizationServerOptions>(configuration.GetSection("AuthorizationServer"));
+
+services.AddScoped<IRequestSender>((serviceProvider) => new RequestSender(serviceProvider.GetRequiredService<IHttpClientFactory>()));
+services.AddScoped<ITokenClient, MemoryCachedTokenClient>();
+services.AddScoped((serviceProvider) => new UserClient(
+    serviceProvider.GetRequiredService<ITokenClient>(),
+    serviceProvider.GetRequiredService<IRequestSender>(),
+    "http://my.api.com/"));
+```
+
+Two token clients are available :
+
+- `TokenClient` : requests a new token on every call.
+- `MemoryCachedTokenClient` : caches the discovery document (24h) and the token in `IMemoryCache` until it expires (minus a 60 seconds margin). Recommended.
+
 ## How can i use the request's builder in standalone ?
 
 You can create a standalone builder by instantiating RequestBuilder.
@@ -393,8 +503,20 @@ You can create a standalone builder by instantiating RequestBuilder.
 ```csharp
 
 // Dont forget to use IRequestBuilder to have access to extensions method !
-IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.GET);
+IRequestBuilder requestBuilder = new RequestBuilder("http://my.api.com/", "api/v1.0/users", Method.Get);
 
 ```
 
 Then, you will have access to all same method that you were using in Client !
+
+## Migrating from 2.x to 3.0
+
+Version 3.0 contains breaking changes :
+
+- **.NET 10 only** : .NET 8 is no longer supported. Stay on 2.x if you can't upgrade yet.
+- **No more `Microsoft.AspNet.WebApi.Client` / Newtonsoft.Json** : responses are now deserialized with System.Text.Json.
+  - `ReadAsAsync<T>(IList<MediaTypeFormatter>)` is replaced by `ReadAsAsync<T>(JsonSerializerOptions?)`. Calls without arguments (`response.ReadAs<User>()`) still compile.
+  - If your models rely on Newtonsoft attributes (`[JsonProperty]`, `[JsonIgnore]` from `Newtonsoft.Json`, ...), replace them with their System.Text.Json equivalents (`[JsonPropertyName]`, `[JsonIgnore]` from `System.Text.Json.Serialization`, ...).
+  - If you were using `HttpContent` extensions from `System.Net.Http.Formatting` (`ReadAsAsync`, `ReadAsMultipartAsync`, ...) through NotoriousClient, reference `Microsoft.AspNet.WebApi.Client` directly in your project.
+
+See the [CHANGELOG](CHANGELOG.md) for details.
