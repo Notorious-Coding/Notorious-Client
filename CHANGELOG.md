@@ -6,11 +6,14 @@
 - Dropped .NET 8 support (out of support since November 2026): the package now targets .NET 10 only.
 - Removed dependency on 'Microsoft.AspNet.WebApi.Client' (and transitively Newtonsoft.Json), which was not trimming / AOT compatible.
 - 'HttpResponseMessageExtensions.ReadAsAsync<T>' and 'ReadAs<T>' now use System.Text.Json: the 'IList<MediaTypeFormatter>' parameter is replaced by an optional 'JsonSerializerOptions' (defaults to case-insensitive Web defaults).
+- 'IRequestBuilder.WithJsonBody' / 'WithJsonMultipartBody': the optional 'IJsonSerializer? converter' parameter is replaced by two overloads. The overloads without serializer are annotated as not trimming / AOT safe.
+- 'RequestBuilder.DefaultJsonConverter' is now nullable, and the parameterless 'SystemTextJsonSerializer' constructor is annotated as not trimming / AOT safe.
 
 ### 🛠 Technical
 
 - Target .NET 10 again.
 - Added 'ReadAsAsync<T>(JsonTypeInfo<T>)' / 'ReadAs<T>(JsonTypeInfo<T>)' overloads for trimmed / native AOT applications.
+- Added 'WithJsonBody<T>(T, JsonTypeInfo<T>)' / 'WithJsonMultipartBody<T>(T, string, JsonTypeInfo<T>)' extensions and a 'SystemTextJsonSerializer(JsonSerializerContext)' constructor for trimmed / native AOT applications. The library no longer emits any trimming / AOT warning.
 - Client credentials token client now uses System.Text.Json source generation.
 - Tests migrated to xunit v3.
 
