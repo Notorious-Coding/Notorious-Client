@@ -70,8 +70,9 @@
         private string BuildUri()
         {
             string uri = GetUri();
-            uri = HandleUriQueryParams(uri, _queryParams);
+            // Endpoint parameters first, so query parameter values are never mistaken for endpoint tokens.
             uri = HandleUriEndPointParams(uri, _endpointParams);
+            uri = HandleUriQueryParams(uri, _queryParams);
             return uri;
         }
 
@@ -79,8 +80,8 @@
         {
             if (queryParams.Count > 0)
             {
-                string queryParamsString = string.Join("&", queryParams.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
-                return string.Format(uri + "?{0}", queryParamsString);
+                string queryParamsString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+                return $"{uri}?{queryParamsString}";
             }
             else
             {

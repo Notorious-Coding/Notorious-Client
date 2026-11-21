@@ -139,6 +139,40 @@ namespace NotoriousClient.Tests.Unit
 
             Assert.Throws<KeyNotFoundException>(() => requestBuilder.Build());
         }
+
+        [GWTFact(given: "a request with an endpoint parameter and a query parameter",
+         when: "i build a request",
+         then: "both are applied")]
+        public void RequestBuilder_Should_HandleEndpointAndQueryParameters()
+        {
+            string url = "https://toto.com";
+            Endpoint endpoint = new Endpoint("/pandas/{id}", Method.Get);
+
+            IRequestBuilder requestBuilder = new RequestBuilder(url, endpoint)
+                .AddEndpointParameter("id", "1")
+                .AddQueryParameter("toto", "toto");
+            HttpRequestMessage request = requestBuilder.Build();
+
+            Assert.NotNull(request.RequestUri);
+            Assert.Equal("https://toto.com/pandas/1?toto=toto", request.RequestUri.AbsoluteUri);
+        }
+
+        [GWTFact(given: "a request with a query parameter value containing braces",
+         when: "i build a request",
+         then: "the value is kept as is")]
+        public void RequestBuilder_Should_NotReplaceTokensInQueryParameters()
+        {
+            string url = "https://toto.com";
+            Endpoint endpoint = new Endpoint("/pandas/{id}", Method.Get);
+
+            IRequestBuilder requestBuilder = new RequestBuilder(url, endpoint)
+                .AddEndpointParameter("id", "1")
+                .AddQueryParameter("filter", "{id}");
+            HttpRequestMessage request = requestBuilder.Build();
+
+            Assert.NotNull(request.RequestUri);
+            Assert.Equal("https://toto.com/pandas/1?filter={id}", request.RequestUri.OriginalString);
+        }
         #endregion
     }
 }
