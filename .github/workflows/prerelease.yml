@@ -13,6 +13,9 @@ on:
   
 jobs:
   publish:
+    permissions:
+      contents: read
+      id-token: write  # GitHub OIDC token for NuGet trusted publishing
     env: 
       CONFIGURATION: 'Release'
       DOTNET_VERSION: '10.0.x'
@@ -31,6 +34,12 @@ jobs:
       run: dotnet test NotoriousClient.Tests.Unit --no-build --verbosity normal
     - name: Pack
       run: dotnet pack -c ${{ env.CONFIGURATION }}  -o out --version-suffix "beta.${{ github.run_number }}"
+    - name: NuGet login (OIDC -> temporary API key)
+      if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}  # nuget.org profile name, not email
     - name: Push
       if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-      run: dotnet nuget push out/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push out/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
