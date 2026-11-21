@@ -1,5 +1,4 @@
 ﻿using NotoriousClient.Converters;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace NotoriousClient.Builder
@@ -7,29 +6,19 @@ namespace NotoriousClient.Builder
     public partial class RequestBuilder : IRequestBuilder
     {
         /// <summary>
-        /// JSON serializer used by <see cref="WithJsonBody(object)"/> and <see cref="WithJsonMultipartBody(object, string)"/>.
-        /// When null, a reflection based <see cref="SystemTextJsonSerializer"/> is used.
+        /// Default JSON Converter.
         /// </summary>
-        protected IJsonSerializer? DefaultJsonConverter;
+        protected IJsonSerializer DefaultJsonConverter = new SystemTextJsonSerializer();
 
         private List<Body> _bodies = new List<Body>();
         private bool? _isMultipartRequest = null;
 
         ///<inheritdoc/>
-        [RequiresUnreferencedCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        [RequiresDynamicCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        public IRequestBuilder WithJsonBody(object data)
-        {
-            return WithJsonBody(data, DefaultJsonConverter ?? new SystemTextJsonSerializer());
-        }
-
-        ///<inheritdoc/>
-        public IRequestBuilder WithJsonBody(object data, IJsonSerializer serializer)
+        public IRequestBuilder WithJsonBody(object data, IJsonSerializer? converter = null)
         {
             ArgumentNullException.ThrowIfNull(data, nameof(data));
-            ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
             SetIsMultipart(isMultipart: false);
-            var body = new Body(new StringContent(serializer.ConvertToJson(data), Encoding.UTF8, "application/json"));
+            var body = new Body(new StringContent(GetConverter(converter).ConvertToJson(data), Encoding.UTF8, "application/json"));
 
             _bodies.Insert(0, body);
             return this;
@@ -66,22 +55,17 @@ namespace NotoriousClient.Builder
         }
 
         ///<inheritdoc/>
-        [RequiresUnreferencedCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        [RequiresDynamicCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        public IRequestBuilder WithJsonMultipartBody(object data, string section)
-        {
-            return WithJsonMultipartBody(data, section, DefaultJsonConverter ?? new SystemTextJsonSerializer());
-        }
-
-        ///<inheritdoc/>
-        public IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer serializer)
+        public IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer? converter = null)
         {
             ArgumentNullException.ThrowIfNull(data, nameof(data));
-            ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
+
+            if (converter == null)
+                converter = DefaultJsonConverter;
 
             SetIsMultipart(isMultipart: true);
 
-            _bodies.Add(new Body(new StringContent(serializer.ConvertToJson(data)), section));
+
+            _bodies.Add(new Body(new StringContent(GetConverter(converter).ConvertToJson(data)), section));
 
             return this;
         }
@@ -112,6 +96,11 @@ namespace NotoriousClient.Builder
             {
                 request.Content = _bodies[0].Content;
             }
+        }
+
+        private IJsonSerializer GetConverter(IJsonSerializer? converter = null)
+        {
+            return converter == null ? DefaultJsonConverter : converter;
         }
 
         private void SetIsMultipart(bool isMultipart)

@@ -1,5 +1,4 @@
 using NotoriousClient.Builder;
-using NotoriousClient.Converters;
 using NotoriousClient.Tests.Unit.Attributes;
 using System.Collections.Specialized;
 
@@ -107,56 +106,6 @@ namespace NotoriousClient.Tests.Unit
             Assert.Equal(2, bodies.Contents.Count);
             Assert.Equal(@"{""Id"":1,""Name"":""Toto""}", await bodies.Contents[0].ReadAsStringAsync());
             Assert.Equal(stream.Length, (await bodies.Contents[1].ReadAsStreamAsync()).Length);
-        }
-
-        [GWTFact(
-            given: "A request with a json body and source generated metadata",
-            when: "i build a request",
-            then: "request has correct json body and content type")]
-        public async Task RequestBuilder_Should_SerializeJsonBodyWithJsonTypeInfo()
-        {
-            var user = new HttpResponseMessageExtensionsUnitTests.User { Id = 1, Name = "Toto" };
-
-            HttpRequestMessage request = new RequestBuilder("https://toto.com", new Endpoint("/pandas", Method.Post))
-                .WithJsonBody(user, TestJsonContext.Default.User)
-                .Build();
-
-            Assert.Equal("application/json", request.Content!.Headers.ContentType!.MediaType);
-            Assert.Equal(@"{""Id"":1,""Name"":""Toto""}", await request.Content.ReadAsStringAsync());
-        }
-
-        [GWTFact(
-            given: "A multipart request with a json body and source generated metadata",
-            when: "i build a multipart request",
-            then: "request has correct section with json body")]
-        public async Task RequestBuilder_Should_SerializeJsonMultipartBodyWithJsonTypeInfo()
-        {
-            var user = new HttpResponseMessageExtensionsUnitTests.User { Id = 1, Name = "Toto" };
-
-            HttpRequestMessage request = new RequestBuilder("https://toto.com", new Endpoint("/pandas", Method.Post))
-                .WithJsonMultipartBody(user, "data", TestJsonContext.Default.User)
-                .WithStreamMultipartBody(new MemoryStream(GetRandomArray(1)), "stream")
-                .Build();
-
-            MultipartMemoryStreamProvider bodies = await request.Content!.ReadAsMultipartAsync();
-
-            Assert.Equal(2, bodies.Contents.Count);
-            Assert.Equal(@"{""Id"":1,""Name"":""Toto""}", await bodies.Contents[0].ReadAsStringAsync());
-        }
-
-        [GWTFact(
-            given: "A request with a json body and a serializer built with a JsonSerializerContext",
-            when: "i build a request",
-            then: "request has correct json body")]
-        public async Task RequestBuilder_Should_SerializeJsonBodyWithContextSerializer()
-        {
-            object user = new HttpResponseMessageExtensionsUnitTests.User { Id = 2, Name = "Titi" };
-
-            HttpRequestMessage request = new RequestBuilder("https://toto.com", new Endpoint("/pandas", Method.Post))
-                .WithJsonBody(user, new SystemTextJsonSerializer(TestJsonContext.Default))
-                .Build();
-
-            Assert.Equal(@"{""Id"":2,""Name"":""Titi""}", await request.Content!.ReadAsStringAsync());
         }
 
         #region Private Methods
