@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using NotoriousClient.Sender;
 using NotoriousClient.Tests.Unit.Attributes;
 
@@ -50,24 +49,5 @@ namespace NotoriousClient.Tests.Unit
             Assert.Equal(1, user.Id);
             Assert.Equal("Toto", user.Name);
         }
-
-        [GWTFact(
-            given: "A json response",
-            when: "i read it with source generated metadata",
-            then: "response is deserialized")]
-        public async Task ReadAsAsync_Should_DeserializeWithJsonTypeInfo()
-        {
-            HttpResponseMessage response = JsonResponse(@"{""Id"":2,""Name"":""Titi""}");
-
-            User user = await response.ReadAsAsync(TestJsonContext.Default.User);
-
-            Assert.Equal(2, user.Id);
-            Assert.Equal("Titi", user.Name);
-        }
-    }
-
-    [JsonSerializable(typeof(HttpResponseMessageExtensionsUnitTests.User))]
-    internal partial class TestJsonContext : JsonSerializerContext
-    {
     }
 }

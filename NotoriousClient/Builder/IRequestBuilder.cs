@@ -1,6 +1,5 @@
 ﻿using NotoriousClient.Builder.Authentication;
 using NotoriousClient.Converters;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NotoriousClient.Builder
 {
@@ -10,20 +9,11 @@ namespace NotoriousClient.Builder
     public interface IRequestBuilder
     {
         /// <summary>
-        /// Add JSON to request's body, using the default reflection based serializer.
-        /// </summary>
-        /// <remarks>For trimmed or native AOT applications, use the overload taking a <c>JsonTypeInfo&lt;T&gt;</c> or an AOT safe <see cref="IJsonSerializer"/>.</remarks>
-        /// <param name="data">Data to add.</param>
-        [RequiresUnreferencedCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        [RequiresDynamicCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        IRequestBuilder WithJsonBody(object data);
-
-        /// <summary>
-        /// Add JSON to request's body, using <paramref name="serializer"/>.
+        /// Add JSON to request's body.
         /// </summary>
         /// <param name="data">Data to add.</param>
-        /// <param name="serializer">Custom json serializer.</param>
-        IRequestBuilder WithJsonBody(object data, IJsonSerializer serializer);
+        /// <param name="converter">Custom json converter.</param>
+        IRequestBuilder WithJsonBody(object data, IJsonSerializer? converter = null);
 
         /// <summary>
         /// Add a Stream to request's body.
@@ -45,22 +35,12 @@ namespace NotoriousClient.Builder
         IRequestBuilder WithStreamMultipartBody(Stream stream, string section);
 
         /// <summary>
-        /// Add a <paramref name="data"/> as JSON to multiplart request's bodies under <paramref name="section"/> name, using the default reflection based serializer.
-        /// </summary>
-        /// <remarks>For trimmed or native AOT applications, use the overload taking a <c>JsonTypeInfo&lt;T&gt;</c> or an AOT safe <see cref="IJsonSerializer"/>.</remarks>
-        /// <param name="data">Data to add.</param>
-        /// <param name="section">Name of multipart section.</param>
-        [RequiresUnreferencedCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        [RequiresDynamicCode(SystemTextJsonSerializer.ReflectionJsonMessage)]
-        IRequestBuilder WithJsonMultipartBody(object data, string section);
-
-        /// <summary>
-        /// Add a <paramref name="data"/> as JSON to multiplart request's bodies under <paramref name="section"/> name, using <paramref name="serializer"/>.
+        /// Add a <paramref name="data"/> to multiplart request's bodies under <paramref name="section"/> name.
         /// </summary>
         /// <param name="data">Data to add.</param>
         /// <param name="section">Name of multipart section.</param>
-        /// <param name="serializer">Custom json serializer.</param>
-        IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer serializer);
+        /// <param name="converter">Custom json converter.</param>
+        IRequestBuilder WithJsonMultipartBody(object data, string section, IJsonSerializer? converter = null);
 
         /// <summary>
         /// Add a http <paramref name="content"/> to multiplart request's bodies under <paramref name="section"/> name.

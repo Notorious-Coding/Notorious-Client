@@ -44,7 +44,7 @@ namespace NotoriousClient.Clients.Authentication.M2M
             HttpResponseMessage response = await Sender.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            return await response.ReadAsAsync(AuthenticationJsonContext.Default.TokenEndpointResponse);
+            return await response.ReadAsAsync<TokenEndpointResponse>();
         }
 
         protected virtual async Task<DiscoveryDocument?> GetDiscoveryDocument()
@@ -52,7 +52,7 @@ namespace NotoriousClient.Clients.Authentication.M2M
             HttpResponseMessage discoResponse = await Sender.SendAsync(GetBuilder(DISCOVERY_ENDPOINT).Build());
             discoResponse.EnsureSuccessStatusCode();
 
-            return await discoResponse.ReadAsAsync(AuthenticationJsonContext.Default.DiscoveryDocument);
+            return await discoResponse.ReadAsAsync<DiscoveryDocument>();
         }
     }
 }

@@ -26,7 +26,7 @@
 - Easy building of HttpRequestMessage
 - Easy building of multipart/form-data requests
 - Body serialisation as JSON, powered by System.Text.Json, but customisable.
-- Response deserialisation powered by System.Text.Json, with trimming / native AOT friendly overloads.
+- Response deserialisation powered by System.Text.Json, but customisable.
 - Easy handling of request's authentication (basic, bearer, custom schemes, OAuth2 client credentials).
 - Infinitely extensible system.
 - Allow you to build maintanable and testable API Client.
@@ -287,25 +287,6 @@ new RequestBuilder("https://toto.com", "/users", Method.Get).WithContentBody(new
 
 > :warning: Note that you could use any type of content handled by .NET, such as StringContent, StreamContent, HttpContent, etc...
 
-**JSON bodies with trimming and native AOT**
-
-`WithJsonBody(data)` and `WithJsonMultipartBody(data, section)` rely on reflection and are annotated with `[RequiresUnreferencedCode]` / `[RequiresDynamicCode]`. In trimmed or native AOT applications, use [System.Text.Json source generation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation) instead :
-
-```csharp
-[JsonSerializable(typeof(User))]
-internal partial class UserJsonContext : JsonSerializerContext
-{
-}
-
-// Pass the generated JsonTypeInfo<T>...
-new RequestBuilder("https://toto.com", "/users", Method.Post).WithJsonBody(user, UserJsonContext.Default.User);
-new RequestBuilder("https://toto.com", "/users", Method.Post).WithJsonMultipartBody(user, "USER_SECTION", UserJsonContext.Default.User);
-
-// ...or a serializer built with your context (handy when data is typed as object).
-IJsonSerializer serializer = new SystemTextJsonSerializer(UserJsonContext.Default);
-new RequestBuilder("https://toto.com", "/users", Method.Post).WithJsonBody(user, serializer);
-```
-
 ### Add body to multipart request
 
 > :warning: Note that you CAN'T use multipart bodies if you already added a classic body to the request
@@ -381,21 +362,6 @@ User user = await response.ReadAsAsync<User>(options);
 ```
 
 > :warning: Responses must have a JSON media type (`application/json`, `application/problem+json`, ...) or no `Content-Type` at all, otherwise an `InvalidOperationException` is thrown.
-
-**Trimming and native AOT**
-
-The overloads above rely on reflection and are annotated with `[RequiresUnreferencedCode]` / `[RequiresDynamicCode]`. If your application is trimmed or published with native AOT, use [System.Text.Json source generation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation) and pass the generated `JsonTypeInfo<T>` :
-
-```csharp
-[JsonSerializable(typeof(User))]
-[JsonSerializable(typeof(IEnumerable<User>))]
-internal partial class UserJsonContext : JsonSerializerContext
-{
-}
-
-User user = await response.ReadAsAsync(UserJsonContext.Default.User);
-IEnumerable<User> users = response.ReadAs(UserJsonContext.Default.IEnumerableUser);
-```
 
 ## How could i implement a custom BaseClient ?
 
@@ -536,8 +502,6 @@ Version 3.0 contains breaking changes :
 - **No more `Microsoft.AspNet.WebApi.Client` / Newtonsoft.Json** : responses are now deserialized with System.Text.Json.
   - `ReadAsAsync<T>(IList<MediaTypeFormatter>)` is replaced by `ReadAsAsync<T>(JsonSerializerOptions?)`. Calls without arguments (`response.ReadAs<User>()`) still compile.
   - If your models rely on Newtonsoft attributes (`[JsonProperty]`, `[JsonIgnore]` from `Newtonsoft.Json`, ...), replace them with their System.Text.Json equivalents (`[JsonPropertyName]`, `[JsonIgnore]` from `System.Text.Json.Serialization`, ...).
-  - `WithJsonBody(object, IJsonSerializer? converter = null)` and `WithJsonMultipartBody(object, string, IJsonSerializer? converter = null)` are split into two overloads (with and without serializer). Calls still compile, unless you were passing `null` explicitly. If you implement `IRequestBuilder` yourself, implement both overloads.
-  - `RequestBuilder.DefaultJsonConverter` is now nullable (`null` means the reflection based `SystemTextJsonSerializer`), and `new SystemTextJsonSerializer()` is annotated as not trimming / AOT safe : use `new SystemTextJsonSerializer(yourJsonSerializerContext)` in AOT applications.
   - If you were using `HttpContent` extensions from `System.Net.Http.Formatting` (`ReadAsAsync`, `ReadAsMultipartAsync`, ...) through NotoriousClient, reference `Microsoft.AspNet.WebApi.Client` directly in your project.
 
 See the [CHANGELOG](CHANGELOG.md) for details.
