@@ -1,5 +1,19 @@
 ﻿# Changelog
 
+## 3.0.0
+### 💥 Breaking changes
+
+- Dropped .NET 8 support (out of support since November 2026): the package now targets .NET 10 only.
+- Removed dependency on 'Microsoft.AspNet.WebApi.Client' (and transitively Newtonsoft.Json), which was not trimming / AOT compatible.
+- 'HttpResponseMessageExtensions.ReadAsAsync<T>' and 'ReadAs<T>' now use System.Text.Json: the 'IList<MediaTypeFormatter>' parameter is replaced by an optional 'JsonSerializerOptions' (defaults to case-insensitive Web defaults).
+
+### 🛠 Technical
+
+- Target .NET 10 again.
+- Added 'ReadAsAsync<T>(JsonTypeInfo<T>)' / 'ReadAs<T>(JsonTypeInfo<T>)' overloads for trimmed / native AOT applications.
+- Client credentials token client now uses System.Text.Json source generation.
+- Tests migrated to xunit v3.
+
 ## 2.1.0
 ### 🛠 Technical
 

@@ -35,7 +35,7 @@ namespace NotoriousClient.Clients.Authentication.M2M
                     { "scope", string.Join(" ", AuthenticationServerOptions.Value.Scopes) }
             })).Build();
 
-            return (await Sender.SendAsync(request)).ReadAs<TokenEndpointResponse>();
+            return (await Sender.SendAsync(request)).ReadAs(AuthenticationJsonContext.Default.TokenEndpointResponse);
         }
 
         protected virtual async Task<DiscoveryDocument?> GetDiscoveryDocument()
@@ -43,7 +43,7 @@ namespace NotoriousClient.Clients.Authentication.M2M
             HttpResponseMessage discoResponse = await Sender.SendAsync(GetBuilder(DISCOVERY_ENDPOINT).Build());
             discoResponse.EnsureSuccessStatusCode();
 
-            return await discoResponse.ReadAsAsync<DiscoveryDocument>();
+            return await discoResponse.ReadAsAsync(AuthenticationJsonContext.Default.DiscoveryDocument);
         }
     }
 }
