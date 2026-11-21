@@ -3,7 +3,7 @@
 namespace NotoriousClient.Converters
 {
     /// <summary>
-    /// Serialize object to JSON using NewtonsoftJson.
+    /// Serialize object to JSON using System.Text.Json.
     /// </summary>
     public class SystemTextJsonSerializer : IJsonSerializer
     {

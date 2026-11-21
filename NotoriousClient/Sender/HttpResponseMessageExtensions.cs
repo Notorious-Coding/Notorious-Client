@@ -1,4 +1,7 @@
-﻿using System.Net.Http.Formatting;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace NotoriousClient.Sender
 {
@@ -7,17 +10,37 @@ namespace NotoriousClient.Sender
     /// </summary>
     public static class HttpResponseMessageExtensions
     {
-        private static readonly IList<MediaTypeFormatter> MediaTypeFormatters = new List<MediaTypeFormatter>() { new JsonMediaTypeFormatter()};
+        private const string ReflectionJsonMessage = "JSON deserialization might require types that cannot be statically analyzed. Use the overload taking a JsonTypeInfo<T> (System.Text.Json source generation) for trimmed or native AOT applications.";
 
         /// <summary>
-        /// Map response to <typeparamref name="T"/> asynchronously.
+        /// Default options used to deserialize JSON responses (case-insensitive property names).
+        /// </summary>
+        private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+
+        /// <summary>
+        /// Map JSON response to <typeparamref name="T"/> asynchronously.
         /// </summary>
         /// <typeparam name="T">Type of response.</typeparam>
         /// <param name="response">Response to map.</param>
+        /// <param name="options">Serializer options. Defaults to <see cref="JsonSerializerDefaults.Web"/> (case-insensitive).</param>
         /// <returns>Mapped content.</returns>
-        public static Task<T> ReadAsAsync<T>(this HttpResponseMessage response, IList<MediaTypeFormatter>? formatters = null)
+        [RequiresUnreferencedCode(ReflectionJsonMessage)]
+        [RequiresDynamicCode(ReflectionJsonMessage)]
+        public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response, JsonSerializerOptions? options = null)
         {
-            return response.Content.ReadAsAsync<T>(MediaTypeFormatters.Union(formatters ?? new List<MediaTypeFormatter>()));
+            return (await response.Content.ReadFromJsonAsync<T>(options ?? DefaultJsonOptions))!;
+        }
+
+        /// <summary>
+        /// Map JSON response to <typeparamref name="T"/> asynchronously, using source generated metadata (trimming and AOT safe).
+        /// </summary>
+        /// <typeparam name="T">Type of response.</typeparam>
+        /// <param name="response">Response to map.</param>
+        /// <param name="jsonTypeInfo">Source generated metadata for <typeparamref name="T"/>.</param>
+        /// <returns>Mapped content.</returns>
+        public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response, JsonTypeInfo<T> jsonTypeInfo)
+        {
+            return (await response.Content.ReadFromJsonAsync(jsonTypeInfo))!;
         }
 
         /// <summary>
@@ -54,10 +77,25 @@ namespace NotoriousClient.Sender
         /// </summary>
         /// <typeparam name="T">Type of response.</typeparam>
         /// <param name="response">Response to map.</param>
+        /// <param name="options">Serializer options. Defaults to <see cref="JsonSerializerDefaults.Web"/> (case-insensitive).</param>
         /// <returns>Mapped content.</returns>
-        public static T ReadAs<T>(this HttpResponseMessage response)
+        [RequiresUnreferencedCode(ReflectionJsonMessage)]
+        [RequiresDynamicCode(ReflectionJsonMessage)]
+        public static T ReadAs<T>(this HttpResponseMessage response, JsonSerializerOptions? options = null)
         {
-            return ReadAsAsync<T>(response).GetAwaiter().GetResult();
+            return ReadAsAsync<T>(response, options).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Map JSON response to <typeparamref name="T"/>, using source generated metadata (trimming and AOT safe).
+        /// </summary>
+        /// <typeparam name="T">Type of response.</typeparam>
+        /// <param name="response">Response to map.</param>
+        /// <param name="jsonTypeInfo">Source generated metadata for <typeparamref name="T"/>.</param>
+        /// <returns>Mapped content.</returns>
+        public static T ReadAs<T>(this HttpResponseMessage response, JsonTypeInfo<T> jsonTypeInfo)
+        {
+            return ReadAsAsync(response, jsonTypeInfo).GetAwaiter().GetResult();
         }
 
         /// <summary>

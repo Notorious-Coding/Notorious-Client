@@ -16,7 +16,7 @@
 
 ## Support
 
-- .NET 8+
+- .NET 10+
 
 ## Features
 
